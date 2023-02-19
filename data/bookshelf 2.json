@@ -1,0 +1,10 @@
+{
+    "books": [{
+        "author": "B",
+        "rating": 5,
+        "title": "A",
+        "status": "READ"
+    }],
+    "goal": 0,
+    "name": "Robin's Bookshelf"
+}
