@@ -1,5 +1,3 @@
-# My Personal Project
-
 ## GreatReads
 
 GreatReads is an application that users can use to keep track of
