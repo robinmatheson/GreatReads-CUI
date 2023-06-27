@@ -6,6 +6,9 @@ info about each book, including but not limited to a reading status and star
 rating. Anybody who reads can use the application. I love to read, and keeping
 track of all of my books that I have read or want to read is very useful.
 
+Please note that some functionality of this project is not implemented at this stage in order to 
+simplify my GUI.
+
 ## User Stories:
 
 *As a user, I want to be able to...*
