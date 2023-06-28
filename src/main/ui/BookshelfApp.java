@@ -6,6 +6,7 @@ import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -122,18 +123,18 @@ public class BookshelfApp {
         } else if (command.equals("tbr")) {
             status = BookStatus.TOBEREAD;
         } else {
-            System.out.println("Not a valid reading status.");
+            System.out.println("Not a valid reading status."); // exception?
         }
 
         System.out.println("Enter the star rating of the book out of 5; 0 if not yet read:");
-        int rating = input.nextInt();
+        int rating = input.nextInt(); // exception
 
         Book b = new Book(title, author, status, rating);
         bs.shelveBook(b);
         if (bs.inBookshelf(b)) {
             System.out.println(title + " has been successfully added to your bookshelf.");
         } else {
-            System.out.println(title + " could not be added to your bookshelf.");
+            System.out.println(title + " could not be added to your bookshelf."); //exception?
         }
     }
 
@@ -147,7 +148,7 @@ public class BookshelfApp {
         } else if (input.equals("tbr")) {
             status = BookStatus.TOBEREAD;
         } else {
-            System.out.println("Not a valid reading status.");
+            System.out.println("Not a valid reading status.");  //exception?
         }
         return status;
     }
@@ -184,27 +185,43 @@ public class BookshelfApp {
                 System.out.println(book.getTitle() + ", " + book.getAuthor()
                         + ", " + book.getStatus() + ", " + book.getRating());
             } else {
-                System.out.println("No book matching that title is in the bookshelf.");
+                System.out.println("No book matching that title is in the bookshelf."); //exception?
             }
         } else if (command.equals("status")) {
             System.out.println("Enter status of books you would like to view: "
                     + "r =  read, cr = currently reading, tbr = to be read");
             command = input.next();
-            BookStatus status = convertStatus(command);
-            for (String t : bs.getBooksOfStatus(status)) {
-                System.out.println(t);
+            if (command != "r" & command != "cr" & command != "tbr") {
+                System.out.println("Not a valid reading status."); //exception?
+            } else {
+                BookStatus status = convertStatus(command);
+                ArrayList<String> bks = bs.getBooksOfStatus(status);
+                if (bks.isEmpty()) {
+                    System.out.println("There are no books of the given status on your bookshelf.");
+                }
+                for (String t : bks) {
+                    System.out.println(t);
+                }
             }
         } else if (command.equals("rating")) {
             System.out.println("Enter rating of books you would like to view; between 0 and 5:");
             int rating = input.nextInt();
             if ((rating < 0) || (rating > 5)) {
-                System.out.println("Not a valid rating.");
+                System.out.println("Not a valid rating."); //exception?
             } else {
-                for (String i : bs.getBooksOfRating(rating)) {
+                ArrayList<String> bks = bs.getBooksOfRating(rating);
+                if (bks.isEmpty()) {
+                    System.out.println("There are no books of the given rating on your bookshelf.");
+                }
+                for (String i : bks) {
                     System.out.println(i);
                 }
+
             }
         } else if (command.equals("all")) {
+            if (bs.getBooks().isEmpty()) {
+                System.out.println("Your bookshelf is empty.");
+            }
             for (String l : bs.getAllBooks()) {
                 System.out.println(l);
             }
@@ -257,24 +274,24 @@ public class BookshelfApp {
                     b.changeStatus(status);
                     System.out.println("Status changed successfully.");
                 } else {
-                    System.out.println("Not a valid reading status.");
+                    System.out.println("Not a valid reading status.");  //exception?
                 }
 
             } else if (command.equals("rating")) {
                 System.out.println("Enter new rating between 1 and 5; 0 if not yet read:");
                 int rating = input.nextInt();
                 if ((rating < 0) || (rating > 5)) {
-                    System.out.println("Not a valid rating.");
+                    System.out.println("Not a valid rating."); //exception?
                 } else {
                     b.changeRating(rating);
                     System.out.println("Rating changed successfully.");
                 }
             } else {
-                System.out.println("Not a valid input.");
+                System.out.println("Not a valid input.");//exception?
             }
 
         } else {
-            System.out.println("Book with given title is not in bookshelf.");
+            System.out.println("Book with given title is not in bookshelf."); //exception?
         }
     }
 
@@ -284,7 +301,11 @@ public class BookshelfApp {
         System.out.println("Enter the number of books you would like to read:");
         int num = input.nextInt();
         bs.setGoal(num);
-        System.out.println("Reading goal set to " + num + " books!");
+        if (num == 1) {
+            System.out.println("Reading goal set to " + num + " book!");
+        } else {
+            System.out.println("Reading goal set to " + num + " books!");
+        }
     }
 
     // EFFECTS: prints string with reading goal progress
@@ -309,7 +330,11 @@ public class BookshelfApp {
     private void viewBookshelfChar() {
         String name = bs.getName();
         int num = bs.getCardinality();
-        System.out.println("Your bookshelf is called " + name + " and has " + num + " books on it!");
+        if (num == 1) {
+            System.out.println("Your bookshelf is called " + name + " and has 1 book on it!");
+        } else {
+            System.out.println("Your bookshelf is called " + name + " and has " + num + " books on it!");
+        }
     }
 
     // EFFECTS: saves the bookshelf to file

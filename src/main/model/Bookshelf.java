@@ -182,7 +182,11 @@ public class Bookshelf implements Writable {
     public String getGoalProgress() {
         int read = getNumberRead();
         int goal = getGoal();
-        return "You have read " + read + " books out of your goal of " + goal + "!";
+        if (read == 1) {
+            return "You have read 1 book out of your goal of " + goal + "!";
+        } else {
+            return "You have read " + read + " books out of your goal of " + goal + "!";
+        }
     }
 
     // EFFECTS: returns number of books on the bookshelf
