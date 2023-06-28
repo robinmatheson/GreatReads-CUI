@@ -131,7 +131,6 @@ public class Bookshelf implements Writable {
 
     // REQUIRES: rating must be an integer between 0 and 5, inclusive
     // EFFECTS: returns titles of all books with given rating
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     public ArrayList<String> getBooksOfRating(int rating) {
         ArrayList<String> allBooksOfRating = new ArrayList<>();
         if (rating == 0) {

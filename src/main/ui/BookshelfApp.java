@@ -103,7 +103,6 @@ public class BookshelfApp {
 
     // MODIFIES: this
     // EFFECTS: adds a book to the bookshelf
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void addBook() {
         String command = input.nextLine();
         System.out.println("Enter title of book:");
@@ -176,7 +175,6 @@ public class BookshelfApp {
     // MODIFIES: this
     // EFFECTS: processes user command
     // source: TellerApp
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void processCommandView(String command) {
         if (command.equals("book")) {
             System.out.println("Enter title of book:");
@@ -236,7 +234,6 @@ public class BookshelfApp {
     // MODIFIES: this
     // EFFECTS: processes user command
     // source: TellerApp
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void processCommandChange(String command) {
         System.out.println("Enter the title of the book you would like to alter:");
         String title = input.next();
