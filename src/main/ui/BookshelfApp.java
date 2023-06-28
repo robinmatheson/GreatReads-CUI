@@ -115,16 +115,7 @@ public class BookshelfApp {
 
         System.out.println("Enter the status of the book: r =  read, cr = currently reading, tbr = to be read:");
         command = input.next();
-        BookStatus status = BookStatus.TOBEREAD;
-        if (command.equals("r")) {
-            status = BookStatus.READ;
-        } else if (command.equals("cr")) {
-            status = BookStatus.CURRENTLYREADING;
-        } else if (command.equals("tbr")) {
-            status = BookStatus.TOBEREAD;
-        } else {
-            System.out.println("Not a valid reading status."); // exception?
-        }
+        BookStatus status = convertStatus(command);
 
         System.out.println("Enter the star rating of the book out of 5; 0 if not yet read:");
         int rating = input.nextInt(); // exception
@@ -140,15 +131,15 @@ public class BookshelfApp {
 
     // EFFECTS: converts string to BookStatus
     private BookStatus convertStatus(String input) {
-        BookStatus status = BookStatus.TOBEREAD;
+        BookStatus status = BookStatus.TOBEREAD; // default if invalid input
         if (input.equals("r")) {
             status = BookStatus.READ;
         } else if (input.equals("cr")) {
             status = BookStatus.CURRENTLYREADING;
         } else if (input.equals("tbr")) {
-            status = BookStatus.TOBEREAD;
+            //status = BookStatus.TOBEREAD; //redundant since default to TBR
         } else {
-            System.out.println("Not a valid reading status.");  //exception?
+            System.out.println("Not a valid reading status.");  //exception? still is tbr
         }
         return status;
     }
@@ -362,9 +353,8 @@ public class BookshelfApp {
     }
     // EFFECTS: prints a log of every action taken in the session with time stamps
     private void printLog() {
-        Iterator<Event> it = EventLog.getInstance().iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString());
         }
     }
 
