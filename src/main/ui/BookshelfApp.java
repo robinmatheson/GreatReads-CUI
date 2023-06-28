@@ -364,7 +364,7 @@ public class BookshelfApp {
     private void printLog() {
         Iterator<Event> it = EventLog.getInstance().iterator();
         while (it.hasNext()) {
-            System.out.println(it.next().toString() + "\n");
+            System.out.println(it.next().toString());
         }
     }
 

@@ -1,10 +1,10 @@
 {
     "books": [{
-        "author": "SJM",
-        "rating": 0,
-        "title": "HOEAB",
-        "status": "CURRENTLYREADING"
+        "author": "dfg",
+        "rating": 2,
+        "title": "wedfg",
+        "status": "READ"
     }],
-    "goal": 21,
-    "name": " Robin's Bookshelf"
+    "goal": 5,
+    "name": "mine"
 }

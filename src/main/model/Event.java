@@ -59,7 +59,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return dateLogged.toString() + "\n" + description;
+        return dateLogged.toString() + ": " + description;
     }
 }
 
