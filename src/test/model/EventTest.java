@@ -12,7 +12,7 @@ public class EventTest {
     private Event e;
 
     @Test
-    public void testCreateBookshelf() {
+    public void testCreateBookshelfEvent() {
         e = new Event("Made bookshelf called My Bookshelf");
         assertEquals("Made bookshelf called My Bookshelf", e.getDescription());
     }

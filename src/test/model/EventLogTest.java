@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EventLogTest {
 
+    //test class for Event seems redundant when EventLogTest implicitly tests Event anyways
+
     private EventLog el;
     private Bookshelf bs;
     private Iterator<Event> itr;
@@ -21,7 +23,7 @@ public class EventLogTest {
     }
 
     @Test
-    public void testCreateBookshelf() {
+    public void testCreateBookshelfLog() {
         bs = new Bookshelf("Mine");
         itr = el.iterator();
         itr.next();
@@ -30,7 +32,7 @@ public class EventLogTest {
     }
 
     @Test
-    public void testAddBook() {
+    public void testAddBookLog() {
         bs = new Bookshelf("Mine");
         bs.shelveBook(new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5));
         itr = el.iterator();
@@ -41,7 +43,7 @@ public class EventLogTest {
     }
 
     @Test
-    public void testBurnBook() {
+    public void testBurnBookLog() {
         bs = new Bookshelf("Mine");
         bs.shelveBook(new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5));
         bs.shelveBook(new Book("Babel", "RF Kuang", BookStatus.TOBEREAD, 0));
@@ -56,7 +58,7 @@ public class EventLogTest {
     }
 
     @Test
-    public void testChangeBookshelfName() {
+    public void testChangeBookshelfNameLog() {
         bs = new Bookshelf("Mine");
         bs.setName("Yours");
         itr = el.iterator();
@@ -64,5 +66,30 @@ public class EventLogTest {
         itr.next();
         assertTrue(itr.hasNext());
         assertEquals("Changed name of bookshelf to Yours", itr.next().getDescription());
+    }
+
+    @Test
+    public void testSaveToFileLog() {
+
+    }
+
+    @Test
+    public void testLoadFromFileLog() {
+
+    }
+
+    @Test
+    public void testSetGoalLog() {
+
+    }
+
+    @Test
+    public void testChangeStatusLog() {
+
+    }
+
+    @Test
+    public void testChangeRatingLog() {
+
     }
 }

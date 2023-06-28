@@ -1,8 +1,6 @@
 package persistence;
 
-import model.Book;
-import model.BookStatus;
-import model.Bookshelf;
+import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -48,6 +46,7 @@ public class JsonReader {
         Bookshelf bs = new Bookshelf(name);
         bs.setGoal(goal);
         addBooks(bs, jsonObject);
+        EventLog.getInstance().logEvent(new Event("Loaded bookshelf from file."));
         return bs;
     }
 

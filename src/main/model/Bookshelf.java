@@ -31,6 +31,7 @@ public class Bookshelf implements Writable {
     // EFFECTS: sets goal to int given
     public void setGoal(int goal) {
         this.goal = goal;
+        EventLog.getInstance().logEvent(new Event("Set reading goal to " + goal));
     }
 
     // MODIFIES: this
@@ -191,7 +192,6 @@ public class Bookshelf implements Writable {
 
     // EFFECTS: returns number of books on the bookshelf
     public int getCardinality() {
-        EventLog.getInstance().logEvent(new Event("Retrieved number of books in bookshelf"));
         return books.size();
     }
 

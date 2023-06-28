@@ -34,6 +34,7 @@ public class Book implements Writable {
         if (this.status != status) {
             this.status = status;
         }
+        EventLog.getInstance().logEvent(new Event("Changed status of " + title));
     }
 
     // REQUIRES: rating is between 1 and 5; 0 if book is not read
@@ -43,6 +44,7 @@ public class Book implements Writable {
         if (this.rating != rating) {
             this.rating = rating;
         }
+        EventLog.getInstance().logEvent(new Event("Changed rating of " + title));
     }
 
     // getters
