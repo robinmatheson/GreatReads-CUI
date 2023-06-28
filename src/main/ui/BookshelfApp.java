@@ -40,6 +40,7 @@
 //            command = input.next();
 //
 //            if (command.equals("q")) {
+//                printLog();
 //                keepGoing = false;
 //            } else {
 //                processCommandRoot(command);
@@ -330,7 +331,7 @@
 //    }
 //
 //    // MODIFIES: this
-//    // EFFECTS: loads bookshelf form file
+//    // EFFECTS: loads bookshelf from file
 //    private void loadBookshelf() {
 //        try {
 //            bs = jsonReader.read();
@@ -338,6 +339,15 @@
 //        } catch (IOException e) {
 //            System.out.println("Unable to read from file: " + JSON_STORE);
 //        }
+//    }
+//    // EFFECTS: prints a log of every action taken in the session with time stamps
+//    private void printLog() {
+//        Iterator<Event> it = EventLog.getInstance().iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString() + "\n");
+//        }
+//        frame.dispose();
+//        System.exit(0);
 //    }
 //
 //}
