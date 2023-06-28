@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,7 +61,7 @@ public class JsonReaderTest extends JsonTest {
             JsonReader reader = new JsonReader("./data/testReaderGeneralWorkRoom.json");
             Bookshelf newBS = reader.read();
             assertEquals("My Bookshelf", newBS.getName());
-            DefaultListModel<Book> books = newBS.getBooks();
+            ArrayList<Book> books = newBS.getBooks();
             assertEquals(2, books.size());
             checkBook("Kingdom of Ash", "Sarah J. Maas", BookStatus.CURRENTLYREADING, 0,
                     books.get(0));
