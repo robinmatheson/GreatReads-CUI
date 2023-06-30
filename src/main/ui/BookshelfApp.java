@@ -120,12 +120,13 @@ public class BookshelfApp {
         System.out.println("Enter the star rating of the book out of 5; 0 if not yet read:");
         int rating = input.nextInt(); // exception
 
-        Book b = new Book(title, author, status, rating);
-        bs.shelveBook(b);
-        if (bs.inBookshelf(b)) {
+        if (!bs.inBookshelf(title)) {
+            Book b = new Book(title, author, status, rating);
+            bs.shelveBook(b);
             System.out.println(title + " has been successfully added to your bookshelf.");
         } else {
-            System.out.println(title + " could not be added to your bookshelf."); //exception?
+            System.out.println("A book with the given title is already in your bookshelf. To add the new book, " +
+                    "please delete the old one first.");
         }
     }
 
