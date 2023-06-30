@@ -88,8 +88,9 @@ public class Bookshelf implements Writable {
         ArrayList<String> allBooksOfStatus = new ArrayList<>();
         Iterator<Book> booksIterator = getBooksIterator();
         while (booksIterator.hasNext()) {
-            if (booksIterator.next().getStatus() == status) {
-                allBooksOfStatus.add(booksIterator.next().getTitle());
+            Book next = booksIterator.next();
+            if (next.getStatus() == status) {
+                allBooksOfStatus.add(next.getTitle());
             }
         }
         return allBooksOfStatus;
@@ -101,8 +102,9 @@ public class Bookshelf implements Writable {
         ArrayList<String> allBooksOfRating = new ArrayList<>();
         Iterator<Book> booksIterator = getBooksIterator();
         while (booksIterator.hasNext()) {
-            if (booksIterator.next().getRating() == rating) {
-                allBooksOfRating.add(booksIterator.next().getTitle());
+            Book next = booksIterator.next();
+            if (next.getRating() == rating) {
+                allBooksOfRating.add(next.getTitle());
             }
         }
         return allBooksOfRating;
