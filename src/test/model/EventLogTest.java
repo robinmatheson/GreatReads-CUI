@@ -125,16 +125,32 @@ public class EventLogTest {
 
     @Test
     public void testSetGoalLog() {
-
+        bs = new Bookshelf("Mine");
+        bs.setGoal(31);
+        itr = el.iterator();
+        itr.next();
+        itr.next();
+        assertTrue(itr.hasNext());
+        assertEquals("Set reading goal to 31 books.", itr.next().getDescription());
     }
 
     @Test
     public void testChangeStatusLog() {
-
+        Book book = new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5);
+        book.changeStatus(BookStatus.CURRENTLYREADING);
+        itr = el.iterator();
+        itr.next();
+        assertTrue(itr.hasNext());
+        assertEquals("Changed status of Heartstopper", itr.next().getDescription());
     }
 
     @Test
     public void testChangeRatingLog() {
-
+        Book book = new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5);
+        book.changeRating(1);
+        itr = el.iterator();
+        itr.next();
+        assertTrue(itr.hasNext());
+        assertEquals("Changed rating of Heartstopper", itr.next().getDescription());
     }
 }
