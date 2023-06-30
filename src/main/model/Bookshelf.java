@@ -41,8 +41,11 @@ public class Bookshelf implements Writable {
 
     // MODIFIES: this
     // EFFECTS: adds book to list of books in the bookshelf
-    public void shelveBook(Book book) {
-        if (!inBookshelf(book)) {
+    public void shelveBook(Book book) throws Exception {
+        if (inBookshelf(book.getTitle())) {
+            throw new Exception("A book with the given title is already in your bookshelf. To add the current one, " +
+                    "please delete the old one first.");
+        } else {
             books.put(book.getTitle(), book);
         }
         EventLog.getInstance().logEvent(new Event("Added " + book.getTitle() + " to bookshelf"));

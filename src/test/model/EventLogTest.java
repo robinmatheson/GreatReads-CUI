@@ -40,7 +40,7 @@ public class EventLogTest {
     }
 
     @Test
-    public void testAddBookLog() {
+    public void testAddBookLog() throws Exception {
         bs = new Bookshelf("Mine");
         bs.shelveBook(new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5));
         itr = el.iterator();
@@ -51,7 +51,7 @@ public class EventLogTest {
     }
 
     @Test
-    public void testBurnBookLog() {
+    public void testBurnBookLog() throws Exception {
         bs = new Bookshelf("Mine");
         bs.shelveBook(new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5));
         bs.shelveBook(new Book("Babel", "RF Kuang", BookStatus.TOBEREAD, 0));
@@ -107,6 +107,8 @@ public class EventLogTest {
             // expected
         } catch (FileNotFoundException e) {
             fail();
+        } catch (Exception e) {
+            fail();
         }
 
         // make second bookshelf
@@ -118,6 +120,8 @@ public class EventLogTest {
         try {
             bs = reader.read();
         } catch (IOException e) {
+            fail();
+        } catch (Exception e) {
             fail();
         }
         assertEquals("First", bs.getName());
@@ -142,7 +146,7 @@ public class EventLogTest {
     }
 
     @Test
-    public void testChangeStatusLog() {
+    public void testChangeStatusLog() throws Exception {
         Book book = new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5);
         book.changeStatus(BookStatus.CURRENTLYREADING);
         itr = el.iterator();
@@ -152,7 +156,7 @@ public class EventLogTest {
     }
 
     @Test
-    public void testChangeRatingLog() {
+    public void testChangeRatingLog() throws Exception {
         Book book = new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5);
         book.changeRating(1);
         itr = el.iterator();

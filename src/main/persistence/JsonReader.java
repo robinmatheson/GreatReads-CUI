@@ -22,7 +22,7 @@ public class JsonReader {
 
     // EFFECTS: reads bookshelf from file and returns it;
     //          throws IOException if an error occurs reading data from file
-    public Bookshelf read() throws IOException {
+    public Bookshelf read() throws IOException, Exception {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseBookshelf(jsonObject);
@@ -40,7 +40,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses bookshelf from JSON object and returns it
-    private Bookshelf parseBookshelf(JSONObject jsonObject) {
+    private Bookshelf parseBookshelf(JSONObject jsonObject) throws Exception {
         String name = jsonObject.getString("name");
         int goal = jsonObject.getInt("goal");
         EventLog.getInstance().logEvent(new Event("Loaded bookshelf from file."));
@@ -52,7 +52,7 @@ public class JsonReader {
 
     // MODIFIES: bs
     // EFFECTS: parses books from JSON object and adds them to bookshelf
-    private void addBooks(Bookshelf bs, JSONObject jsonObject) {
+    private void addBooks(Bookshelf bs, JSONObject jsonObject) throws Exception {
         JSONArray jsonArray = jsonObject.getJSONArray("books");
         for (Object json : jsonArray) {
             JSONObject nextBook = (JSONObject) json;
@@ -62,7 +62,7 @@ public class JsonReader {
 
     // MODIFIES: bs
     // EFFECTS: parses book from JSON object and adds it to the workroom
-    private void addBook(Bookshelf bs, JSONObject jsonObject) {
+    private void addBook(Bookshelf bs, JSONObject jsonObject) throws Exception {
         String title = jsonObject.getString("title");
         String author = jsonObject.getString("author");
         BookStatus status = BookStatus.valueOf(jsonObject.getString("status"));

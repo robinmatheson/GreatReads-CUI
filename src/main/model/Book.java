@@ -13,16 +13,26 @@ public class Book implements Writable {
     /*
      * REQUIRES: status is one of READ, CURRENTLYREADING, or TOBEREAD;
      *          star rating is between 1 and 5, or 0 if not yet read
+     * else throws exception
      * EFFECTS: title of book is set to title and cannot be assigned to any other book;
      *          name of author is set to author;
      *          set status of book to one of READ, CURRENTLYREADING, or TOBEREAD;
      *          set star rating between 1 and 5, 0 if not yet read.
+     * else throws exception
      */
-    public Book(String title, String author, BookStatus status, int rating) {
+    public Book(String title, String author, BookStatus status, int rating) throws Exception {
         this.title = title;
         this.author = author;
-        this.status = status;
-        this.rating = rating;
+        if (status != BookStatus.READ || status != BookStatus.CURRENTLYREADING || status != BookStatus.TOBEREAD) {
+            throw new Exception("Not a valid status.");
+        } else {
+            this.status = status;
+        }
+        if (rating < 0 || rating > 5) {
+            throw new Exception("Not a valid rating.");
+        } else {
+            this.rating = rating;
+        }
     }
 
     // setters

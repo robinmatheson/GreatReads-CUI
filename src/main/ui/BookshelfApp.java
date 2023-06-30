@@ -20,7 +20,7 @@ public class BookshelfApp {
 
     // EFFECTS: runs the Bookshelf Application
     // source: TellerApp
-    public BookshelfApp() {
+    public BookshelfApp() throws Exception {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         runBookshelfApp();
@@ -29,7 +29,7 @@ public class BookshelfApp {
     // MODIFIES: this
     // EFFECTS: processes user input
     // source: TellerApp
-    private void runBookshelfApp() {
+    private void runBookshelfApp() throws Exception {
         boolean keepGoing = true;
         String command = null;
 
@@ -78,7 +78,7 @@ public class BookshelfApp {
     // MODIFIES: this
     // EFFECTS: processes user command from main menu
     // source: TellerApp
-    private void processCommandRoot(String command) {
+    private void processCommandRoot(String command) throws Exception {
         if (command.equals("a")) {
             addBook();
         } else if (command.equals("b")) {
@@ -112,26 +112,35 @@ public class BookshelfApp {
         System.out.println("Enter the name of the author:");
         String author = input.nextLine();
 
+        try {
+            System.out.println("Enter the status of the book: r =  read, cr = currently reading, tbr = to be read:");
+            command = input.next();
+            BookStatus status = convertStatus(command); // convertStatus throws exception for invalid status
 
-        System.out.println("Enter the status of the book: r =  read, cr = currently reading, tbr = to be read:");
-        command = input.next();
-        BookStatus status = convertStatus(command);
+            System.out.println("Enter the star rating of the book out of 5; 0 if not yet read:");
+            int rating = input.nextInt();
+            checkValidRating(rating);// want exception caught here if invalid rating
 
-        System.out.println("Enter the star rating of the book out of 5; 0 if not yet read:");
-        int rating = input.nextInt(); // exception
-
-        if (!bs.inBookshelf(title)) {
-            Book b = new Book(title, author, status, rating);
+            Book b = new Book(title, author, status, rating); // this is where exception is thrown
             bs.shelveBook(b);
             System.out.println(title + " has been successfully added to your bookshelf.");
-        } else {
-            System.out.println("A book with the given title is already in your bookshelf. To add the new book, " +
-                    "please delete the old one first.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
+    // EFFECTS: throws exception if rating is invalid
+    private void checkValidRating(int rat) throws Exception {
+        if (rat < 0 || rat > 5) {
+            throw new Exception("Not a valid rating.");
+        } else {
+            // do nothing
+        }
+    }
+
+
     // EFFECTS: converts string to BookStatus
-    private BookStatus convertStatus(String input) {
+    private BookStatus convertStatus(String input) throws Exception {
         BookStatus status = BookStatus.TOBEREAD; // default if invalid input
         if (input.equals("r")) {
             status = BookStatus.READ;
@@ -140,7 +149,7 @@ public class BookshelfApp {
         } else if (input.equals("tbr")) {
             //status = BookStatus.TOBEREAD; //redundant since default to TBR
         } else {
-            System.out.println("Not a valid reading status.");  //exception? still is tbr
+            throw new Exception("Not a valid status.");  //exception? still is tbr
         }
         return status;
     }
@@ -148,7 +157,7 @@ public class BookshelfApp {
     // EFFECTS: prints new menu for user to view different sets of books
 
     // source: TellerApp
-    private void viewBooks() {
+    private void viewBooks() throws Exception {
         String command = null;
         displayMenuView();
         command = input.next();
@@ -168,7 +177,7 @@ public class BookshelfApp {
     // MODIFIES: this
     // EFFECTS: processes user command
     // source: TellerApp
-    private void processCommandView(String command) {
+    private void processCommandView(String command) throws Exception {
         if (command.equals("book")) {
             System.out.println("Enter title of book:");
             String title = input.next();
@@ -352,6 +361,8 @@ public class BookshelfApp {
             System.out.println("Loaded " + bs.getName() + " from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
     // EFFECTS: prints a log of every action taken in the session with time stamps

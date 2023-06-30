@@ -26,6 +26,8 @@ public class JsonReaderTest extends JsonTest {
             fail("IOException expected");
         } catch (IOException e) {
             //expected
+        } catch (Exception e) {
+            fail();
         }
     }
 
@@ -43,6 +45,8 @@ public class JsonReaderTest extends JsonTest {
             assertEquals("My Bookshelf", newBS.getName());
             assertEquals(0, newBS.getCardinality());
         } catch (IOException e) {
+            fail();
+        } catch (Exception e) {
             fail();
         }
     }
@@ -68,6 +72,8 @@ public class JsonReaderTest extends JsonTest {
                     books.get("Kingdom of Ash"));
             checkBook("Heartstopper", "Alice Oseman", BookStatus.READ, 5, books.get("Heartstopper"));
         } catch (IOException e) {
+            fail();
+        } catch (Exception e) {
             fail();
         }
     }

@@ -22,7 +22,7 @@ public class BookshelfTest {
     private Book book9;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         myBookshelf = new Bookshelf("Robin's Bookshelf");
         myBookshelf.setGoal(100);
         book1 = new Book("Throne of Glass", "Sarah J. Maas", READ, 4);
@@ -44,7 +44,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testSimpleGetters() {
+    public void testSimpleGetters() throws Exception {
         myBookshelf.shelveBook(book1);
         assertEquals(100, myBookshelf.getGoal());
         assertEquals("Robin's Bookshelf", myBookshelf.getName());
@@ -65,14 +65,14 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testShelveOneBook() {
+    public void testShelveOneBook() throws Exception {
         myBookshelf.shelveBook(book1);
         assertEquals(1, myBookshelf.getBooks().size());
         assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
     }
 
     @Test
-    public void testShelveMultipleBooks() {
+    public void testShelveMultipleBooks() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
@@ -81,15 +81,20 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testShelveRepeatBook() {
+    public void testShelveRepeatBook() throws Exception {
         myBookshelf.shelveBook(book3);
-        myBookshelf.shelveBook(book3);
+        try {
+            myBookshelf.shelveBook(book3);
+            fail();
+        } catch (Exception e) {
+            // expected
+        }
         assertEquals(1, myBookshelf.getBooks().size());
         assertEquals(book3, myBookshelf.getBooks().get("The Secret History"));
     }
 
     @Test
-    public void testRemoveOneBook() {
+    public void testRemoveOneBook() throws Exception {
         myBookshelf.shelveBook(book3);
         assertEquals(1, myBookshelf.getBooks().size());
         assertEquals(book3, myBookshelf.getBooks().get("The Secret History"));
@@ -98,7 +103,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testRemoveOneBookOfMany() {
+    public void testRemoveOneBookOfMany() throws Exception {
         myBookshelf.shelveBook(book3);
         myBookshelf.shelveBook(book4);
         myBookshelf.shelveBook(book1);
@@ -113,7 +118,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testRemoveMultipleBooks() {
+    public void testRemoveMultipleBooks() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book4);
@@ -125,7 +130,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testRemoveBookNotOnShelf() {
+    public void testRemoveBookNotOnShelf() throws Exception {
         myBookshelf.shelveBook(book4);
         myBookshelf.burnBook(book1.getTitle());
         assertEquals(1, myBookshelf.getBooks().size());
@@ -133,42 +138,42 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testAddAndRemoveBook() {
+    public void testAddAndRemoveBook() throws Exception {
         myBookshelf.shelveBook(book2);
         myBookshelf.burnBook(book2.getTitle());
         assertTrue(myBookshelf.getBooks().isEmpty());
     }
 
     @Test
-    public void testInBookshelfBook() {
+    public void testInBookshelfBook() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book4);
         assertTrue(myBookshelf.inBookshelf(book1));
     }
 
     @Test
-    public void testNotInBookshelfBook() {
+    public void testNotInBookshelfBook() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book4);
         assertFalse(myBookshelf.inBookshelf(book3));
     }
 
     @Test
-    public void testInBookshelfString() {
+    public void testInBookshelfString() throws Exception {
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
         assertTrue(myBookshelf.inBookshelf("Love On the Brain"));
     }
 
     @Test
-    public void testNotInBookshelfString() {
+    public void testNotInBookshelfString() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book3);
         assertFalse(myBookshelf.inBookshelf("Love On the Brain"));
     }
 
     @Test
-    public void testGetAllBooks() {
+    public void testGetAllBooks() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
@@ -179,7 +184,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetBooksTBR() {
+    public void testGetBooksTBR() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
@@ -193,7 +198,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetBooksCurrentlyReading() {
+    public void testGetBooksCurrentlyReading() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book4);
         myBookshelf.shelveBook(book3);
@@ -206,7 +211,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetBooksRead() {
+    public void testGetBooksRead() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book4);
         myBookshelf.shelveBook(book3);
@@ -217,7 +222,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetBooksReadNoneInBookshelf() {
+    public void testGetBooksReadNoneInBookshelf() throws Exception {
         myBookshelf.shelveBook(book3);
         assertTrue(myBookshelf.getBooksOfStatus(READ).isEmpty());
     }
@@ -228,7 +233,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetFiveStarBooks() {
+    public void testGetFiveStarBooks() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
@@ -239,7 +244,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetFourStarBooks() {
+    public void testGetFourStarBooks() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
@@ -250,7 +255,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetThreeStarBooks() {
+    public void testGetThreeStarBooks() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
@@ -261,7 +266,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetTwoStarBooks() {
+    public void testGetTwoStarBooks() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book8);
@@ -272,7 +277,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetOneStarBooks() {
+    public void testGetOneStarBooks() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book9);
         myBookshelf.shelveBook(book3);
@@ -283,7 +288,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetZeroStarBooks() {
+    public void testGetZeroStarBooks() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
@@ -296,7 +301,7 @@ public class BookshelfTest {
 
 
     @Test
-    public void testGetCardinality() {
+    public void testGetCardinality() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
@@ -309,14 +314,14 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetReadNoneOnBookshelf() {
+    public void testGetReadNoneOnBookshelf() throws Exception {
         myBookshelf.shelveBook(book3);
         myBookshelf.shelveBook(book4);
         assertEquals(0, myBookshelf.getNumberRead());
     }
 
     @Test
-    public void testGetRead() {
+    public void testGetRead() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
@@ -324,7 +329,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testNoneGetRead() {
+    public void testNoneGetRead() throws Exception {
         myBookshelf.shelveBook(book4);
         myBookshelf.shelveBook(book5);
         myBookshelf.shelveBook(book3);
@@ -332,7 +337,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetGoalProgress() {
+    public void testGetGoalProgress() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
@@ -340,7 +345,7 @@ public class BookshelfTest {
     }
 
     @Test
-    public void testGetBook() {
+    public void testGetBook() throws Exception {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
