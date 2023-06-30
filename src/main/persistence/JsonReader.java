@@ -43,10 +43,10 @@ public class JsonReader {
     private Bookshelf parseBookshelf(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         int goal = jsonObject.getInt("goal");
+        EventLog.getInstance().logEvent(new Event("Loaded bookshelf from file."));
         Bookshelf bs = new Bookshelf(name);
         bs.setGoal(goal);
         addBooks(bs, jsonObject);
-        EventLog.getInstance().logEvent(new Event("Loaded bookshelf from file."));
         return bs;
     }
 

@@ -7,6 +7,8 @@ import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+// Most Events tested in EventLogTest.java
+
 public class EventTest {
 
     private Event e;

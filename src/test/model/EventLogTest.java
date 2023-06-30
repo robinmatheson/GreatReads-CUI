@@ -2,7 +2,11 @@ package model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,6 +19,9 @@ public class EventLogTest {
     private EventLog el;
     private Bookshelf bs;
     private Iterator<Event> itr;
+    private JsonWriter writer;
+    private JsonReader reader;
+    private static final String JSON_STORE = "./data/bookshelf.json";
 
     @BeforeEach
     public void setUp() {
@@ -70,12 +77,50 @@ public class EventLogTest {
 
     @Test
     public void testSaveToFileLog() {
-
+        bs = new Bookshelf("Mine");
+        JsonWriter writer = new JsonWriter(JSON_STORE);
+        try {
+            writer.open();
+            writer.write(bs);
+            writer.close();
+            // expected
+        } catch (FileNotFoundException e) {}
+        itr = el.iterator();
+        itr.next();
+        itr.next();
+        assertTrue(itr.hasNext());
+        assertEquals("Saved bookshelf to file.", itr.next().getDescription());
     }
 
     @Test
     public void testLoadFromFileLog() {
+        // make bookshelf to save to file
+        bs = new Bookshelf("First");
+        JsonWriter writer = new JsonWriter(JSON_STORE);
+        try {
+            writer.open();
+            writer.write(bs);
+            writer.close();
+            // expected
+        } catch (FileNotFoundException e) {}
 
+        // make second bookshelf
+         bs = new Bookshelf("Second");
+        assertEquals("Second", bs.getName());
+
+        // load First bookshelf from file
+        reader = new JsonReader(JSON_STORE);
+        try {
+            bs = reader.read();
+        } catch (IOException e) {}
+        assertEquals("First", bs.getName());
+        itr = el.iterator();
+        itr.next();
+        itr.next();
+        itr.next();
+        itr.next();
+        assertTrue(itr.hasNext());
+        assertEquals("Loaded bookshelf from file.", itr.next().getDescription());
     }
 
     @Test
