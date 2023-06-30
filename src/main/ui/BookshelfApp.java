@@ -178,6 +178,7 @@ public class BookshelfApp {
             } else {
                 System.out.println("No book matching that title is in the bookshelf."); //exception?
             }
+
         } else if (command.equals("status")) {
             System.out.println("Enter status of books you would like to view: "
                     + "r =  read, cr = currently reading, tbr = to be read");
@@ -194,6 +195,7 @@ public class BookshelfApp {
                     System.out.println(t);
                 }
             }
+
         } else if (command.equals("rating")) {
             System.out.println("Enter rating of books you would like to view; between 0 and 5:");
             int rating = input.nextInt();
