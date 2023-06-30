@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,10 +57,11 @@ public class JsonWriterTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testWriterGeneralBookshelf.json");
         bs = reader.read();
         assertEquals("My Bookshelf", bs.getName());
-        ArrayList<Book> books = bs.getBooks();
+        HashMap<String, Book> books = bs.getBooks();
         assertEquals(2, books.size());
-        checkBook("Kingdom of Ash", "Sarah J. Maas", BookStatus.CURRENTLYREADING, 0, books.get(0));
-        checkBook("Heartstopper", "Alice Oseman", BookStatus.READ, 5, books.get(1));
+        checkBook("Kingdom of Ash", "Sarah J. Maas", BookStatus.CURRENTLYREADING, 0,
+                books.get("Kingdom of Ash"));
+        checkBook("Heartstopper", "Alice Oseman", BookStatus.READ, 5, books.get("Heartstopper"));
 
     }
 }

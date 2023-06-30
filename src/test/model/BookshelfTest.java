@@ -49,7 +49,7 @@ public class BookshelfTest {
         assertEquals(100, myBookshelf.getGoal());
         assertEquals("Robin's Bookshelf", myBookshelf.getName());
         assertEquals(1, myBookshelf.getBooks().size());
-        assertEquals(book1, myBookshelf.getBooks().get(0));
+        assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
     }
 
     @Test
@@ -67,16 +67,16 @@ public class BookshelfTest {
     @Test
     public void testShelveOneBook() {
         myBookshelf.shelveBook(book1);
-        assertEquals(book1, myBookshelf.getBooks().get(0));
         assertEquals(1, myBookshelf.getBooks().size());
+        assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
     }
 
     @Test
     public void testShelveMultipleBooks() {
         myBookshelf.shelveBook(book1);
         myBookshelf.shelveBook(book2);
-        assertEquals(book1, myBookshelf.getBooks().get(0));
-        assertEquals(book2, myBookshelf.getBooks().get(1));
+        assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
+        assertEquals(book2, myBookshelf.getBooks().get("Love On the Brain"));
         assertEquals(2, myBookshelf.getBooks().size());
     }
 
@@ -85,14 +85,14 @@ public class BookshelfTest {
         myBookshelf.shelveBook(book3);
         myBookshelf.shelveBook(book3);
         assertEquals(1, myBookshelf.getBooks().size());
-        assertEquals(book3, myBookshelf.getBooks().get(0));
+        assertEquals(book3, myBookshelf.getBooks().get("The Secret History"));
     }
 
     @Test
     public void testRemoveOneBook() {
         myBookshelf.shelveBook(book3);
         assertEquals(1, myBookshelf.getBooks().size());
-        assertEquals(book3, myBookshelf.getBooks().get(0));
+        assertEquals(book3, myBookshelf.getBooks().get("The Secret History"));
         myBookshelf.burnBook(book3.getTitle());
         assertTrue(myBookshelf.getBooks().isEmpty());
     }
@@ -103,13 +103,13 @@ public class BookshelfTest {
         myBookshelf.shelveBook(book4);
         myBookshelf.shelveBook(book1);
         assertEquals(3, myBookshelf.getBooks().size());
-        assertEquals(book3, myBookshelf.getBooks().get(0));
-        assertEquals(book4, myBookshelf.getBooks().get(1));
-        assertEquals(book1, myBookshelf.getBooks().get(2));
+        assertEquals(book3, myBookshelf.getBooks().get("The Secret History"));
+        assertEquals(book4, myBookshelf.getBooks().get("Heartstopper"));
+        assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
         myBookshelf.burnBook(book3.getTitle());
         assertEquals(2, myBookshelf.getBooks().size());
-        assertEquals(book4, myBookshelf.getBooks().get(0));
-        assertEquals(book1, myBookshelf.getBooks().get(1));
+        assertEquals(book4, myBookshelf.getBooks().get("Heartstopper"));
+        assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
     }
 
     @Test
@@ -121,7 +121,7 @@ public class BookshelfTest {
         myBookshelf.burnBook(book2.getTitle());
         myBookshelf.burnBook(book1.getTitle());
         assertEquals(1, myBookshelf.getBooks().size());
-        assertEquals(book4, myBookshelf.getBooks().get(0));
+        assertEquals(book4, myBookshelf.getBooks().get("Heartstopper"));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class BookshelfTest {
         myBookshelf.shelveBook(book4);
         myBookshelf.burnBook(book1.getTitle());
         assertEquals(1, myBookshelf.getBooks().size());
-        assertEquals(book4, myBookshelf.getBooks().get(0));
+        assertEquals(book4, myBookshelf.getBooks().get("Heartstopper"));
     }
 
     @Test
@@ -173,9 +173,9 @@ public class BookshelfTest {
         myBookshelf.shelveBook(book2);
         myBookshelf.shelveBook(book3);
         myBookshelf.getAllBooks();
-        assertTrue(myBookshelf.getBooks().contains(book1));
-        assertTrue(myBookshelf.getBooks().contains(book2));
-        assertTrue(myBookshelf.getBooks().contains(book3));
+        assertTrue(myBookshelf.getBooks().containsValue(book1));
+        assertTrue(myBookshelf.getBooks().containsValue(book2));
+        assertTrue(myBookshelf.getBooks().containsValue(book3));
     }
 
     @Test
@@ -185,6 +185,7 @@ public class BookshelfTest {
         myBookshelf.shelveBook(book3);
         myBookshelf.shelveBook(book6);
         ArrayList<String> tbr = myBookshelf.getBooksOfStatus(TOBEREAD);
+        assertEquals(2, tbr.size());
         assertTrue(tbr.contains(book6.getTitle()));
         assertTrue(tbr.contains(book3.getTitle()));
         assertFalse((tbr.contains(book2.getTitle())));

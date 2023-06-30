@@ -9,12 +9,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EventLogTest {
 
-    //test class for Event seems redundant when EventLogTest implicitly tests Event anyways
+    //test class for Event seems redundant when EventLogTest implicitly tests Event anyway
 
     private EventLog el;
     private Bookshelf bs;
@@ -78,13 +79,15 @@ public class EventLogTest {
     @Test
     public void testSaveToFileLog() {
         bs = new Bookshelf("Mine");
-        JsonWriter writer = new JsonWriter(JSON_STORE);
+        writer = new JsonWriter(JSON_STORE);
         try {
             writer.open();
             writer.write(bs);
             writer.close();
             // expected
-        } catch (FileNotFoundException e) {}
+        } catch (FileNotFoundException e) {
+            fail();
+        }
         itr = el.iterator();
         itr.next();
         itr.next();
@@ -96,13 +99,15 @@ public class EventLogTest {
     public void testLoadFromFileLog() {
         // make bookshelf to save to file
         bs = new Bookshelf("First");
-        JsonWriter writer = new JsonWriter(JSON_STORE);
+        writer = new JsonWriter(JSON_STORE);
         try {
             writer.open();
             writer.write(bs);
             writer.close();
             // expected
-        } catch (FileNotFoundException e) {}
+        } catch (FileNotFoundException e) {
+            fail();
+        }
 
         // make second bookshelf
          bs = new Bookshelf("Second");
@@ -112,7 +117,9 @@ public class EventLogTest {
         reader = new JsonReader(JSON_STORE);
         try {
             bs = reader.read();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            fail();
+        }
         assertEquals("First", bs.getName());
         itr = el.iterator();
         itr.next();
