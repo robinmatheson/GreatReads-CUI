@@ -1,5 +1,8 @@
 package ui;
 
+import exceptions.InvalidEntryException;
+import exceptions.InvalidRatingException;
+import exceptions.InvalidStatusException;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -115,43 +118,37 @@ public class BookshelfApp {
         try {
             System.out.println("Enter the status of the book: r =  read, cr = currently reading, tbr = to be read:");
             command = input.next();
-            BookStatus status = convertStatus(command); // convertStatus throws exception for invalid status
+            checkValidStatus(command); // want exception caught here if invalid status
+            String status = command;
 
             System.out.println("Enter the star rating of the book out of 5; 0 if not yet read:");
             int rating = input.nextInt();
             checkValidRating(rating);// want exception caught here if invalid rating
 
-            Book b = new Book(title, author, status, rating); // this is where exception is thrown
+            Book b = new Book(title, author, status, rating);
             bs.shelveBook(b);
             System.out.println(title + " has been successfully added to your bookshelf.");
-        } catch (Exception e) {
+        } catch (InvalidEntryException e) {
             System.out.println(e.getMessage());
         }
     }
 
     // EFFECTS: throws exception if rating is invalid
-    private void checkValidRating(int rat) throws Exception {
+    private void checkValidRating(int rat) throws InvalidRatingException {
         if (rat < 0 || rat > 5) {
-            throw new Exception("Not a valid rating.");
+            throw new InvalidRatingException();
         } else {
             // do nothing
         }
     }
 
-
-    // EFFECTS: converts string to BookStatus
-    private BookStatus convertStatus(String input) throws Exception {
-        BookStatus status = BookStatus.TOBEREAD; // default if invalid input
-        if (input.equals("r")) {
-            status = BookStatus.READ;
-        } else if (input.equals("cr")) {
-            status = BookStatus.CURRENTLYREADING;
-        } else if (input.equals("tbr")) {
-            //status = BookStatus.TOBEREAD; //redundant since default to TBR
+    // EFFECTS: throws exception if status is invalid
+    private void checkValidStatus(String stat) throws InvalidStatusException {
+        if (stat != "r" & stat != "cr" & stat != "tbr") {
+            throw new InvalidStatusException();
         } else {
-            throw new Exception("Not a valid status.");  //exception? still is tbr
+            // do nothing
         }
-        return status;
     }
 
     // EFFECTS: prints new menu for user to view different sets of books
@@ -168,7 +165,7 @@ public class BookshelfApp {
     // source: TellerApp
     private void displayMenuView() {
         System.out.println("book -> view a specific book");
-        System.out.println("status -> view books of a certain status"); // gui
+        System.out.println("status -> view books of a certain status");
         System.out.println("rating -> view books of a certain rating");
         System.out.println("all -> view all books on your bookshelf");
     }
@@ -186,41 +183,32 @@ public class BookshelfApp {
                 System.out.println(book.getTitle() + ", " + book.getAuthor()
                         + ", " + book.getStatus() + ", " + book.getRating());
             } else {
-                System.out.println("No book matching that title is in the bookshelf."); //exception?
+                System.out.println("No book matching that title is in the bookshelf.");
             }
 
         } else if (command.equals("status")) {
             System.out.println("Enter status of books you would like to view: "
                     + "r =  read, cr = currently reading, tbr = to be read");
-            command = input.next();
-            if (command != "r" & command != "cr" & command != "tbr") {
-                System.out.println("Not a valid reading status."); //exception?
-            } else {
-                BookStatus status = convertStatus(command);
-                ArrayList<String> bks = bs.getBooksOfStatus(status);
-                if (bks.isEmpty()) {
-                    System.out.println("There are no books of the given status on your bookshelf.");
-                }
-                for (String t : bks) {
-                    System.out.println(t);
-                }
+            String status = input.next();
+            ArrayList<String> bks = bs.getBooksOfStatus(status); // will throw invalid status exception
+            if (bks.isEmpty()) {
+                System.out.println("There are no books of the given status on your bookshelf.");
+            }
+            for (String t : bks) {
+                System.out.println(t);
             }
 
         } else if (command.equals("rating")) {
             System.out.println("Enter rating of books you would like to view; between 0 and 5:");
             int rating = input.nextInt();
-            if ((rating < 0) || (rating > 5)) {
-                System.out.println("Not a valid rating."); //exception?
-            } else {
-                ArrayList<String> bks = bs.getBooksOfRating(rating);
-                if (bks.isEmpty()) {
-                    System.out.println("There are no books of the given rating on your bookshelf.");
-                }
-                for (String i : bks) {
-                    System.out.println(i);
-                }
-
+            ArrayList<String> bks = bs.getBooksOfRating(rating); // will throw invalid rating exception
+            if (bks.isEmpty()) {
+                System.out.println("There are no books of the given rating on your bookshelf.");
             }
+            for (String i : bks) {
+                System.out.println(i);
+            }
+
         } else if (command.equals("all")) {
             if (bs.getBooks().isEmpty()) {
                 System.out.println("Your bookshelf is empty.");
@@ -259,44 +247,32 @@ public class BookshelfApp {
         String title = input.next();
         if (bs.inBookshelf(title)) {
             Book b = bs.getBook(title);
-            BookStatus status;
 
             if (command.equals("status")) {
                 System.out.println("Enter new status: r =  read, cr = currently reading, tbr = to be read:");
-                command = input.next();
-                if (command.equals("r")) {
-                    status = BookStatus.READ;
+                String status = input.next();
+                try {
                     b.changeStatus(status);
                     System.out.println("Status changed successfully.");
-                } else if (command.equals("cr")) {
-                    status = BookStatus.CURRENTLYREADING;
-                    b.changeStatus(status);
-                    System.out.println("Status changed successfully.");
-                } else if (command.equals("tbr")) {
-                    status = BookStatus.TOBEREAD;
-                    b.changeStatus(status);
-                    System.out.println("Status changed successfully.");
-                } else {
-                    System.out.println("Not a valid reading status.");  //exception?
+                } catch (InvalidStatusException e) {
+                    System.out.println(e.getMessage());
                 }
 
             } else if (command.equals("rating")) {
                 System.out.println("Enter new rating between 1 and 5; 0 if not yet read:");
                 int rating = input.nextInt();
-                if ((rating < 0) || (rating > 5)) {
-                    System.out.println("Not a valid rating."); //exception?
-                } else {
+                try {
                     b.changeRating(rating);
                     System.out.println("Rating changed successfully.");
+                } catch (InvalidRatingException e) {
+                    System.out.println(e.getMessage());
                 }
-            } else {
-                System.out.println("Not a valid input.");//exception?
             }
 
-        } else {
-            System.out.println("Book with given title is not in bookshelf."); //exception?
+            } else {
+                System.out.println("Book with given title is not in bookshelf.");
+            }
         }
-    }
 
     // MODIFIES: this
     // EFFECTS: sets a goal for the bookshelf

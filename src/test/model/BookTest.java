@@ -1,9 +1,13 @@
 package model;
 
+import exceptions.InvalidEntryException;
+import exceptions.InvalidRatingException;
+import exceptions.InvalidStatusException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static model.BookStatus.*;
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -15,11 +19,11 @@ public class BookTest {
     private Book book4;
 
     @BeforeEach
-    public void setUp() {
-        book1 = new Book("Throne of Glass", "Sarah J. Maas", READ, 4);
-        book2 = new Book("Love On the Brain", "Ali Hazelwood", READ, 5);
-        book3 = new Book("The Secret History", "Donna Tartt", TOBEREAD, 0);
-        book4 = new Book("Heartstopper", "Alice Oseman", CURRENTLYREADING, 0);
+    public void setUp() throws InvalidEntryException {
+        book1 = new Book("Throne of Glass", "Sarah J. Maas", "r", 4);
+        book2 = new Book("Love On the Brain", "Ali Hazelwood", "r", 5);
+        book3 = new Book("The Secret History", "Donna Tartt", "tbr", 0);
+        book4 = new Book("Heartstopper", "Alice Oseman", "cr", 0);
     }
 
     @Test
@@ -32,38 +36,38 @@ public class BookTest {
 
 
     @Test
-    public void testChangeNewStatus() {
-        book4.changeStatus(TOBEREAD);
+    public void testChangeNewStatus() throws InvalidStatusException {
+        book4.changeStatus("tbr");
         assertEquals(TOBEREAD, book4.getStatus());
     }
 
     @Test
-    public void testChangeSameStatus() {
-        book2.changeStatus(READ);
+    public void testChangeSameStatus() throws InvalidStatusException {
+        book2.changeStatus("r");
         assertEquals(READ, book2.getStatus());
     }
 
     @Test
-    public void testChangeMultipleStatus() {
-        book3.changeStatus(CURRENTLYREADING);
-        book3.changeStatus(READ);
+    public void testChangeMultipleStatus() throws InvalidStatusException {
+        book3.changeStatus("cr");
+        book3.changeStatus("r");
         assertEquals(READ, book3.getStatus());
     }
 
     @Test
-    public void testChangeNewRating() {
+    public void testChangeNewRating() throws InvalidRatingException {
         book3.changeRating(1);
         assertEquals(1, book3.getRating());
     }
 
     @Test
-    public void testChangeSameRating() {
+    public void testChangeSameRating() throws InvalidRatingException {
         book1.changeRating(4);
         assertEquals(4, book1.getRating());
     }
 
     @Test
-    public void testChangeMultipleRating() {
+    public void testChangeMultipleRating() throws InvalidRatingException {
         book3.changeRating(4);
         book3.changeRating(5);
         assertEquals(5, book3.getRating());
@@ -75,6 +79,26 @@ public class BookTest {
         assertEquals("Donna Tartt", book3.getAuthor());
         assertEquals(READ, book2.getStatus());
         assertEquals(0, book3.getRating());
+    }
+
+    @Test
+    public void testInvalidRating() {
+        try {
+            book2.changeRating(6);
+            fail();
+        } catch (InvalidRatingException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testInvalidStatus() {
+        try {
+            book3.changeStatus("dnf");
+            fail();
+        } catch (InvalidStatusException e) {
+            //expected
+        }
     }
 
 }
