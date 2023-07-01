@@ -1,5 +1,8 @@
 package model;
 
+import exceptions.DuplicateBookException;
+import exceptions.InvalidEntryException;
+import exceptions.InvalidGoalException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import persistence.JsonReader;
@@ -40,9 +43,9 @@ public class EventLogTest {
     }
 
     @Test
-    public void testAddBookLog() throws Exception {
+    public void testAddBookLog() throws DuplicateBookException, InvalidEntryException {
         bs = new Bookshelf("Mine");
-        bs.shelveBook(new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5));
+        bs.shelveBook(new Book("Heartstopper", "Alice Oseman", "r", 5));
         itr = el.iterator();
         itr.next();
         itr.next();
@@ -51,10 +54,10 @@ public class EventLogTest {
     }
 
     @Test
-    public void testBurnBookLog() throws Exception {
+    public void testBurnBookLog() throws DuplicateBookException, InvalidEntryException {
         bs = new Bookshelf("Mine");
-        bs.shelveBook(new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5));
-        bs.shelveBook(new Book("Babel", "RF Kuang", BookStatus.TOBEREAD, 0));
+        bs.shelveBook(new Book("Heartstopper", "Alice Oseman", "r", 5));
+        bs.shelveBook(new Book("Babel", "RF Kuang", "tbr", 0));
         bs.burnBook("Heartstopper");
         itr = el.iterator();
         itr.next();
@@ -135,7 +138,7 @@ public class EventLogTest {
     }
 
     @Test
-    public void testSetGoalLog() {
+    public void testSetGoalLog() throws InvalidGoalException {
         bs = new Bookshelf("Mine");
         bs.setGoal(31);
         itr = el.iterator();
@@ -146,9 +149,9 @@ public class EventLogTest {
     }
 
     @Test
-    public void testChangeStatusLog() throws Exception {
-        Book book = new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5);
-        book.changeStatus(BookStatus.CURRENTLYREADING);
+    public void testChangeStatusLog() throws InvalidEntryException {
+        Book book = new Book("Heartstopper", "Alice Oseman", "r", 5);
+        book.changeStatus("cr");
         itr = el.iterator();
         itr.next();
         assertTrue(itr.hasNext());
@@ -156,8 +159,8 @@ public class EventLogTest {
     }
 
     @Test
-    public void testChangeRatingLog() throws Exception {
-        Book book = new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5);
+    public void testChangeRatingLog() throws InvalidEntryException {
+        Book book = new Book("Heartstopper", "Alice Oseman", "r", 5);
         book.changeRating(1);
         itr = el.iterator();
         itr.next();
