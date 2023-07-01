@@ -347,7 +347,7 @@ public class BookshelfApp {
             System.out.println("Loaded " + bs.getName() + " from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
-        } catch (Exception e) {
+        } catch (Exception e) { // should never occur since loading valid bookshelf from scratch
             System.out.println(e.getMessage());
         }
     }

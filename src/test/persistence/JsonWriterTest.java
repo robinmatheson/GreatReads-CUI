@@ -1,5 +1,7 @@
 package persistence;
 
+import exceptions.DuplicateBookException;
+import exceptions.InvalidEntryException;
 import model.Book;
 import model.BookStatus;
 import model.Bookshelf;
@@ -30,7 +32,7 @@ public class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterEmptyBookshelf() throws IOException {
+    void testWriterEmptyBookshelf() throws IOException, InvalidEntryException, DuplicateBookException {
         Bookshelf bs = new Bookshelf("My Bookshelf");
         JsonWriter writer = new JsonWriter("./data/testWriterEmptyBookshelf.json");
         writer.open();
@@ -44,11 +46,11 @@ public class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterGeneralBookshelf() throws IOException {
+    void testWriterGeneralBookshelf() throws IOException, InvalidEntryException, DuplicateBookException {
         Bookshelf bs = new Bookshelf("My Bookshelf");
-        bs.shelveBook(new Book("Kingdom of Ash", "Sarah J. Maas", BookStatus.CURRENTLYREADING,
+        bs.shelveBook(new Book("Kingdom of Ash", "Sarah J. Maas", "cr",
                 0));
-        bs.shelveBook(new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5));
+        bs.shelveBook(new Book("Heartstopper", "Alice Oseman", "r", 5));
         JsonWriter writer = new JsonWriter("./data/testWriterGeneralBookshelf.json");
         writer.open();
         writer.write(bs);

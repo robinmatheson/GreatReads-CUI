@@ -1,5 +1,8 @@
 package persistence;
 
+import exceptions.DuplicateBookException;
+import exceptions.InvalidEntryException;
+import exceptions.InvalidGoalException;
 import model.Book;
 import model.BookStatus;
 import model.Bookshelf;
@@ -15,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ToJsonTest {
 
     @Test
-    public void testToJsonBook() {
-        Book book = new Book("A", "B", BookStatus.TOBEREAD, 0);
+    public void testToJsonBook() throws InvalidEntryException {
+        Book book = new Book("A", "B", "tbr", 0);
         JSONObject obj = book.toJson();
         obj.has("title");
         obj.has("author");
@@ -29,11 +32,11 @@ public class ToJsonTest {
     }
 
     @Test
-    public void testToJsonBookshelf() {
+    public void testToJsonBookshelf() throws InvalidEntryException, DuplicateBookException {
         Bookshelf bs = new Bookshelf("Mine");
         bs.setGoal(13);
-        bs.shelveBook(new Book("A", "B", BookStatus.TOBEREAD, 0));
-        bs.shelveBook(new Book("C", "D", BookStatus.CURRENTLYREADING, 3));
+        bs.shelveBook(new Book("A", "B", "tbr", 0));
+        bs.shelveBook(new Book("C", "D", "cr", 3));
         JSONObject obj1 = bs.toJson();
         obj1.has("name");
         obj1.has("books");

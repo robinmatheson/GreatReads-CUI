@@ -1,5 +1,7 @@
 package persistence;
 
+import exceptions.DuplicateBookException;
+import exceptions.InvalidEntryException;
 import model.Book;
 import model.BookStatus;
 import model.Bookshelf;
@@ -22,7 +24,7 @@ public class JsonReaderTest extends JsonTest {
     void testReaderNonExistentFile() {
         JsonReader reader = new JsonReader("./data/noSuchFile.json");
         try {
-            Bookshelf bs = reader.read();
+            reader.read();
             fail("IOException expected");
         } catch (IOException e) {
             //expected
@@ -44,9 +46,7 @@ public class JsonReaderTest extends JsonTest {
             Bookshelf newBS = reader.read();
             assertEquals("My Bookshelf", newBS.getName());
             assertEquals(0, newBS.getCardinality());
-        } catch (IOException e) {
-            fail();
-        } catch (Exception e) {
+        } catch (IOException | InvalidEntryException | DuplicateBookException e) {
             fail();
         }
     }
@@ -55,9 +55,9 @@ public class JsonReaderTest extends JsonTest {
     void testReaderGeneralBookshelf() {
         try {
             Bookshelf bs = new Bookshelf("My Bookshelf");
-            bs.shelveBook(new Book("Kingdom of Ash", "Sarah J. Maas", BookStatus.CURRENTLYREADING,
+            bs.shelveBook(new Book("Kingdom of Ash", "Sarah J. Maas", "cr",
                     0));
-            bs.shelveBook(new Book("Heartstopper", "Alice Oseman", BookStatus.READ, 5));
+            bs.shelveBook(new Book("Heartstopper", "Alice Oseman", "r", 5));
             JsonWriter writer = new JsonWriter("./data/testReaderGeneralWorkRoom.json");
             writer.open();
             writer.write(bs);
@@ -71,9 +71,8 @@ public class JsonReaderTest extends JsonTest {
             checkBook("Kingdom of Ash", "Sarah J. Maas", BookStatus.CURRENTLYREADING, 0,
                     books.get("Kingdom of Ash"));
             checkBook("Heartstopper", "Alice Oseman", BookStatus.READ, 5, books.get("Heartstopper"));
-        } catch (IOException e) {
-            fail();
-        } catch (Exception e) {
+        } catch (IOException | InvalidEntryException | DuplicateBookException e) {
+            System.out.println(e.getMessage());
             fail();
         }
     }
