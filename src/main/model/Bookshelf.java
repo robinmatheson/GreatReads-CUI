@@ -1,5 +1,9 @@
 package model;
 
+import exceptions.DuplicateBookException;
+import exceptions.InvalidGoalException;
+import exceptions.InvalidRatingException;
+import exceptions.InvalidStatusException;
 import model.Book;
 import model.BookStatus;
 import org.json.JSONArray;
@@ -27,9 +31,13 @@ public class Bookshelf implements Writable {
     // REQUIRES: goal >= 0
     // MODIFIES: this
     // EFFECTS: sets goal to int given
-    public void setGoal(int goal) {
-        this.goal = goal;
-        EventLog.getInstance().logEvent(new Event("Set reading goal to " + goal + " books."));
+    public void setGoal(int goal) throws InvalidGoalException {
+        if (goal < 0) {
+            throw new InvalidGoalException();
+        } else {
+            this.goal = goal;
+            EventLog.getInstance().logEvent(new Event("Set reading goal to " + goal + " books."));
+        }
     }
 
     // MODIFIES: this
@@ -41,10 +49,9 @@ public class Bookshelf implements Writable {
 
     // MODIFIES: this
     // EFFECTS: adds book to list of books in the bookshelf
-    public void shelveBook(Book book) throws Exception {
+    public void shelveBook(Book book) throws DuplicateBookException {
         if (inBookshelf(book.getTitle())) {
-            throw new Exception("A book with the given title is already in your bookshelf. To add the current one, " +
-                    "please delete the old one first.");
+            throw new DuplicateBookException();
         } else {
             books.put(book.getTitle(), book);
         }
@@ -87,27 +94,47 @@ public class Bookshelf implements Writable {
     }
 
     // EFFECTS: returns list titles of all the books in the bookshelf of given status
-    public ArrayList<String> getBooksOfStatus(BookStatus status) {
+    public ArrayList<String> getBooksOfStatus(String status) throws InvalidStatusException {
         ArrayList<String> allBooksOfStatus = new ArrayList<>();
+        BookStatus stat = convertStatus(status);
         Iterator<Book> booksIterator = getBooksIterator();
         while (booksIterator.hasNext()) {
             Book next = booksIterator.next();
-            if (next.getStatus() == status) {
+            if (next.getStatus() == stat) {
                 allBooksOfStatus.add(next.getTitle());
             }
         }
         return allBooksOfStatus;
     }
 
+    // EFFECTS: converts string to BookStatus
+    private BookStatus convertStatus(String input) throws InvalidStatusException {
+        BookStatus status = BookStatus.TOBEREAD;
+        if (input.equals("r")) {
+            status = BookStatus.READ;
+        } else if (input.equals("cr")) {
+            status = BookStatus.CURRENTLYREADING;
+        } else if (input.equals("tbr")) {
+            //status = BookStatus.TOBEREAD; //redundant since default to TBR
+        } else {
+            throw new InvalidStatusException();
+        }
+        return status;
+    }
+
     // REQUIRES: rating must be an integer between 0 and 5, inclusive
     // EFFECTS: returns titles of all books with given rating
-    public ArrayList<String> getBooksOfRating(int rating) {
+    public ArrayList<String> getBooksOfRating(int rating) throws InvalidRatingException {
         ArrayList<String> allBooksOfRating = new ArrayList<>();
-        Iterator<Book> booksIterator = getBooksIterator();
-        while (booksIterator.hasNext()) {
-            Book next = booksIterator.next();
-            if (next.getRating() == rating) {
-                allBooksOfRating.add(next.getTitle());
+        if (rating < 0 || rating > 5) {
+            throw new InvalidRatingException();
+        } else {
+            Iterator<Book> booksIterator = getBooksIterator();
+            while (booksIterator.hasNext()) {
+                Book next = booksIterator.next();
+                if (next.getRating() == rating) {
+                    allBooksOfRating.add(next.getTitle());
+                }
             }
         }
         return allBooksOfRating;

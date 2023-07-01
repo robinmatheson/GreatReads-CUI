@@ -1,8 +1,6 @@
 package ui;
 
-import exceptions.InvalidEntryException;
-import exceptions.InvalidRatingException;
-import exceptions.InvalidStatusException;
+import exceptions.*;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -128,7 +126,7 @@ public class BookshelfApp {
             Book b = new Book(title, author, status, rating);
             bs.shelveBook(b);
             System.out.println(title + " has been successfully added to your bookshelf.");
-        } catch (InvalidEntryException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -190,23 +188,31 @@ public class BookshelfApp {
             System.out.println("Enter status of books you would like to view: "
                     + "r =  read, cr = currently reading, tbr = to be read");
             String status = input.next();
-            ArrayList<String> bks = bs.getBooksOfStatus(status); // will throw invalid status exception
-            if (bks.isEmpty()) {
-                System.out.println("There are no books of the given status on your bookshelf.");
-            }
-            for (String t : bks) {
-                System.out.println(t);
+            try {
+                ArrayList<String> bks = bs.getBooksOfStatus(status);
+                if (bks.isEmpty()) {
+                    System.out.println("There are no books of the given status on your bookshelf.");
+                }
+                for (String t : bks) {
+                    System.out.println(t);
+                }
+            } catch (InvalidStatusException e) {
+                System.out.println(e.getMessage());
             }
 
         } else if (command.equals("rating")) {
             System.out.println("Enter rating of books you would like to view; between 0 and 5:");
             int rating = input.nextInt();
-            ArrayList<String> bks = bs.getBooksOfRating(rating); // will throw invalid rating exception
-            if (bks.isEmpty()) {
-                System.out.println("There are no books of the given rating on your bookshelf.");
-            }
-            for (String i : bks) {
-                System.out.println(i);
+            try {
+                ArrayList<String> bks = bs.getBooksOfRating(rating); // will throw invalid rating exception
+                if (bks.isEmpty()) {
+                    System.out.println("There are no books of the given rating on your bookshelf.");
+                }
+                for (String i : bks) {
+                    System.out.println(i);
+                }
+            } catch (InvalidRatingException e) {
+                System.out.println(e.getMessage());
             }
 
         } else if (command.equals("all")) {
@@ -279,11 +285,15 @@ public class BookshelfApp {
     private void doSetGoal() {
         System.out.println("Enter the number of books you would like to read:");
         int num = input.nextInt();
-        bs.setGoal(num);
-        if (num == 1) {
-            System.out.println("Reading goal set to " + num + " book!");
-        } else {
-            System.out.println("Reading goal set to " + num + " books!");
+        try {
+            bs.setGoal(num);
+            if (num == 1) {
+                System.out.println("Reading goal set to " + num + " book!");
+            } else {
+                System.out.println("Reading goal set to " + num + " books!");
+            }
+        } catch (InvalidGoalException e) {
+            System.out.println(e.getMessage());
         }
     }
 
