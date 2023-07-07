@@ -59,6 +59,32 @@ public class BookshelfApp {
     private void init() {
         input = new Scanner(System.in);
         input.useDelimiter("\n");
+        displayPromptLoad();
+        String command = input.nextLine();
+        processPromptLoad(command);
+    }
+
+    // EFFECTS: displays option to load bookshelf from file
+    private void displayPromptLoad() {
+        System.out.println("Do you want to load a bookshelf from file?");
+        System.out.println("y -> yes");
+        System.out.println("n -> no, I want to create a new one");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: processes user command
+    private void processPromptLoad(String command) {
+        if (command.equals("y")) {
+            loadBookshelf();
+        } else if (command.equals("n")) {
+            createBookshelf();
+        } else {
+            System.out.println("Invalid selection. Please create a new bookshelf.");
+            createBookshelf();
+        }
+    }
+
+    private void createBookshelf() {
         System.out.println("Name your bookshelf:");
         String name = input.nextLine();
         bs = new Bookshelf(name);
