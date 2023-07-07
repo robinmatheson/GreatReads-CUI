@@ -1,10 +1,5 @@
 {
-    "books": [{
-        "author": "asd",
-        "rating": 1,
-        "title": "asd",
-        "status": "CURRENTLYREADING"
-    }],
-    "goal": 34,
-    "name": "mine"
+    "books": [],
+    "goal": 0,
+    "name": "Robin's Bookshelf"
 }

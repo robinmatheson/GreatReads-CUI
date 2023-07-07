@@ -41,6 +41,9 @@ public class BookshelfApp {
             command = input.next();
 
             if (command.equals("q")) {
+                displayPromptSave();
+                command = input.next();
+                processPromptSave(command);
                 printLog();
                 keepGoing = false;
             } else {
@@ -50,7 +53,7 @@ public class BookshelfApp {
         System.out.println("Happy Reading!");
     }
 
-    // MODIFIER: this
+    // MODIFIES: this
     // EFFECTS: initializes bookshelf
     // source: TellerApp
     private void init() {
@@ -168,7 +171,6 @@ public class BookshelfApp {
         System.out.println("all -> view all books on your bookshelf");
     }
 
-    // REQUIRES: books are in bookshelf
     // MODIFIES: this
     // EFFECTS: processes user command
     // source: TellerApp
@@ -261,7 +263,6 @@ public class BookshelfApp {
         System.out.println("rating -> change rating");
     }
 
-    // REQUIRES: book is in bookshelf
     // MODIFIES: this
     // EFFECTS: processes user command
     // source: TellerApp
@@ -368,10 +369,28 @@ public class BookshelfApp {
             System.out.println(e.getMessage());
         }
     }
+
     // EFFECTS: prints a log of every action taken in the session with time stamps
     private void printLog() {
         for (Event event : EventLog.getInstance()) {
             System.out.println(event.toString());
+        }
+    }
+
+    // EFFECTS: displays option to save bookshelf
+    private void displayPromptSave() {
+        System.out.println("Do you want to save " + bs.getName() + " to file?");
+        System.out.println("y -> yes");
+        System.out.println("n -> no");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: processes user command
+    private void processPromptSave(String command) {
+        if (command.equals("y")) {
+            saveBookshelf();
+        } else if (!command.equals("n")) {
+            System.out.println("Invalid selection. Bookshelf not saved to file.");
         }
     }
 
