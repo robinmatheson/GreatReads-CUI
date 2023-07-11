@@ -10,14 +10,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import javax.swing.*;
 import java.util.*;
 
 // represents all the books that are added to the user's bookshelf
+
 public class Bookshelf implements Writable {
 
     private String name;
-    private HashMap<String, Book> books; // key = title, value = book
+    private final HashMap<String, Book> books; // key = title, value = book
     private int goal;
 
     // EFFECTS: constructs a bookshelf with given name and owner's name
@@ -110,14 +110,18 @@ public class Bookshelf implements Writable {
     // EFFECTS: converts string to BookStatus
     private BookStatus convertStatus(String input) throws InvalidStatusException {
         BookStatus status = BookStatus.TOBEREAD;
-        if (input.equals("r")) {
-            status = BookStatus.READ;
-        } else if (input.equals("cr")) {
-            status = BookStatus.CURRENTLYREADING;
-        } else if (input.equals("tbr")) {
-            //status = BookStatus.TOBEREAD; //redundant since default to TBR
-        } else {
-            throw new InvalidStatusException();
+        switch (input) {
+            case "r":
+                status = BookStatus.READ;
+                break;
+            case "cr":
+                status = BookStatus.CURRENTLYREADING;
+                break;
+            case "tbr":
+                //status = BookStatus.TOBEREAD; //redundant since default to TBR
+                break;
+            default:
+                throw new InvalidStatusException();
         }
         return status;
     }

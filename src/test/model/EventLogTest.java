@@ -9,13 +9,14 @@ import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Iterator;
 
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+//@SuppressWarnings("JUnit5AssertionsConverter")
+@SuppressWarnings("JUnit5AssertionsConverter")
 public class EventLogTest {
 
     //test class for Event seems redundant when EventLogTest implicitly tests Event anyway
@@ -24,7 +25,6 @@ public class EventLogTest {
     private Bookshelf bs;
     private Iterator<Event> itr;
     private JsonWriter writer;
-    private JsonReader reader;
     private static final String JSON_STORE = "./data/bookshelf.json";
 
     @BeforeEach
@@ -108,8 +108,6 @@ public class EventLogTest {
             writer.write(bs);
             writer.close();
             // expected
-        } catch (FileNotFoundException e) {
-            fail();
         } catch (Exception e) {
             fail();
         }
@@ -119,11 +117,9 @@ public class EventLogTest {
         assertEquals("Second", bs.getName());
 
         // load First bookshelf from file
-        reader = new JsonReader(JSON_STORE);
+        JsonReader reader = new JsonReader(JSON_STORE);
         try {
             bs = reader.read();
-        } catch (IOException e) {
-            fail();
         } catch (Exception e) {
             fail();
         }

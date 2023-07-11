@@ -7,9 +7,10 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 // represents a book with title, author name, reading status, and star rating
+
 public class Book implements Writable {
-    private String title;             // title of book
-    private String author;            // name of author
+    private final String title;             // title of book
+    private final String author;            // name of author
     private BookStatus status;        // status is READ, CURRENTLYREADING, or TOBEREAD
     private int rating;               // star rating for read books between 1 and 5; 0 if not yet read
 
@@ -35,30 +36,32 @@ public class Book implements Writable {
     // EFFECTS: converts string to BookStatus
     private BookStatus convertStatus(String input) throws InvalidStatusException {
         BookStatus status = BookStatus.TOBEREAD;
-        if (input.equals("r")) {
-            status = BookStatus.READ;
-        } else if (input.equals("cr")) {
-            status = BookStatus.CURRENTLYREADING;
-        } else if (input.equals("tbr")) {
-            //status = BookStatus.TOBEREAD; //redundant since default to TBR
-        } else {
-            throw new InvalidStatusException();
+        switch (input) {
+            case "r":
+                status = BookStatus.READ;
+                break;
+            case "cr":
+                status = BookStatus.CURRENTLYREADING;
+                break;
+            case "tbr":
+                //status = BookStatus.TOBEREAD; //redundant since default to TBR
+                break;
+            default:
+                throw new InvalidStatusException();
         }
         return status;
     }
 
     // setters
 
-    // REQUIRES: status is one of "read", "currently reading", or "to be read"; else throws exception
     // MODIFIES: this
     // EFFECTS: sets status as given status
     public void changeStatus(String status) throws InvalidStatusException {
-        BookStatus stat = convertStatus(status);
-        this.status = stat;
+        // BookStatus stat = convertStatus(status);
+        this.status = convertStatus(status);
         EventLog.getInstance().logEvent(new Event("Changed status of " + title));
     }
 
-    // REQUIRES: rating is between 1 and 5; 0 if book is not read
     // MODIFIES: this
     // EFFECTS: sets rating as given rating
     public void changeRating(int rating) throws InvalidRatingException {

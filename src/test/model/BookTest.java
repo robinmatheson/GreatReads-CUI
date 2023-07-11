@@ -11,6 +11,7 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
+@SuppressWarnings("JUnit5AssertionsConverter")
 public class BookTest {
 
     private Book book1;

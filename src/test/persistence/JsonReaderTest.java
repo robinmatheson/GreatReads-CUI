@@ -7,12 +7,9 @@ import model.BookStatus;
 import model.Bookshelf;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -25,8 +22,8 @@ public class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/noSuchFile.json");
         try {
             reader.read();
-            fail("IOException expected");
-        } catch (IOException e) {
+            fail("FileNotFoundException expected");
+        } catch (FileNotFoundException e) {
             //expected
         } catch (Exception e) {
             fail();

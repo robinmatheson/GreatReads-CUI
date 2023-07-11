@@ -8,7 +8,6 @@ import persistence.JsonWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 
 // Bookshelf application
@@ -16,12 +15,12 @@ public class BookshelfApp {
     private static final String JSON_STORE = "./data/bookshelf.json";
     private Bookshelf bs;
     private Scanner input;
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
+    private final JsonWriter jsonWriter;
+    private final JsonReader jsonReader;
 
     // EFFECTS: runs the Bookshelf Application
     // source: TellerApp
-    public BookshelfApp() throws Exception {
+    public BookshelfApp() {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         runBookshelfApp();
@@ -30,9 +29,9 @@ public class BookshelfApp {
     // MODIFIES: this
     // EFFECTS: processes user input
     // source: TellerApp
-    private void runBookshelfApp() throws Exception {
+    private void runBookshelfApp() {
         boolean keepGoing = true;
-        String command = null;
+        String command;
 
         init();
 
@@ -108,34 +107,44 @@ public class BookshelfApp {
     // MODIFIES: this
     // EFFECTS: processes user command from main menu
     // source: TellerApp
-    private void processCommandRoot(String command) throws Exception {
-        if (command.equals("a")) {
-            addBook();
-        } else if (command.equals("b")) {
-            viewBooks();
-        } else if (command.equals("c")) {
-            changeABook();
-        } else if (command.equals("g")) {
-            doSetGoal();
-        } else if (command.equals("p")) {
-            viewGoalProgress();
-        } else if (command.equals("r")) {
-            removeBook();
-        } else if (command.equals("v")) {
-            viewBookshelfChar();
-        } else if (command.equals("s")) {
-            saveBookshelf();
-        } else if (command.equals("l")) {
-            loadBookshelf();
-        } else {
-            System.out.println("Selection not valid. Please select another option.");
+    private void processCommandRoot(String command) {
+        switch (command) {
+            case "a":
+                addBook();
+                break;
+            case "b":
+                viewBooks();
+                break;
+            case "c":
+                changeABook();
+                break;
+            case "g":
+                doSetGoal();
+                break;
+            case "p":
+                viewGoalProgress();
+                break;
+            case "r":
+                removeBook();
+                break;
+            case "v":
+                viewBookshelfChar();
+                break;
+            case "s":
+                saveBookshelf();
+                break;
+            case "l":
+                loadBookshelf();
+                break;
+            default:
+                System.out.println("Selection not valid. Please select another option.");
+                break;
         }
     }
 
     // MODIFIES: this
     // EFFECTS: adds a book to the bookshelf
     private void addBook() {
-        String command = input.nextLine();
         System.out.println("Enter title of book:");
         String title = input.nextLine();
 
@@ -144,8 +153,7 @@ public class BookshelfApp {
 
         try {
             System.out.println("Enter the status of the book: r = read, cr = currently reading, tbr = to be read:");
-            command = input.next();
-            String status = command;
+            String status = input.next();
             checkValidStatus(status); // want exception caught here if invalid status
 
             System.out.println("Enter the star rating of the book out of 5; 0 if not yet read:");
@@ -164,27 +172,24 @@ public class BookshelfApp {
     private void checkValidRating(int rat) throws InvalidRatingException {
         if (rat < 0 || rat > 5) {
             throw new InvalidRatingException();
-        } else {
-            // do nothing
-        }
+        }  // do nothing
+
     }
 
     // EFFECTS: throws exception if status is invalid
     private void checkValidStatus(String stat) throws InvalidStatusException {
         if (!stat.equals("r") && !stat.equals("cr") && !stat.equals("tbr")) {
             throw new InvalidStatusException();
-        } else {
-            // do nothing
-        }
+        }  // do nothing
+
     }
 
     // EFFECTS: prints new menu for user to view different sets of books
 
     // source: TellerApp
     private void viewBooks() {
-        String command = null;
         displayMenuView();
-        command = input.next();
+        String command = input.next();
         processCommandView(command);
     }
 
@@ -201,84 +206,87 @@ public class BookshelfApp {
     // EFFECTS: processes user command
     // source: TellerApp
     private void processCommandView(String command) {
-        if (command.equals("book")) {
-            System.out.println("Enter title of book:");
-            String title = input.next();
-            if (bs.inBookshelf(title)) {
-                Book book = bs.getBook(title);
-                if (book.getRating() == 1) {
-                    System.out.println(book.getTitle() + " by " + book.getAuthor()
-                            + ", " + statusToNiceString(book.getStatus()) + ", 1 star");
+        switch (command) {
+            case "book":
+                System.out.println("Enter title of book:");
+                String title = input.next();
+                if (bs.inBookshelf(title)) {
+                    Book book = bs.getBook(title);
+                    if (book.getRating() == 1) {
+                        System.out.println(book.getTitle() + " by " + book.getAuthor()
+                                + ", " + statusToNiceString(book.getStatus()) + ", 1 star");
+                    } else {
+                        System.out.println(book.getTitle() + " by " + book.getAuthor()
+                                + ", " + statusToNiceString(book.getStatus()) + ", " + book.getRating() + " stars");
+                    }
                 } else {
-                    System.out.println(book.getTitle() + " by " + book.getAuthor()
-                            + ", " + statusToNiceString(book.getStatus()) + ", " + book.getRating() + " stars");
+                    System.out.println("No book matching that title is in the bookshelf.");
                 }
-            } else {
-                System.out.println("No book matching that title is in the bookshelf.");
-            }
 
-        } else if (command.equals("status")) {
-            System.out.println("Enter status of books you would like to view: "
-                    + "r =  read, cr = currently reading, tbr = to be read");
-            String status = input.next();
-            try {
-                ArrayList<String> bks = bs.getBooksOfStatus(status);
-                if (bks.isEmpty()) {
-                    System.out.println("There are no books of the given status on your bookshelf.");
+                break;
+            case "status":
+                System.out.println("Enter status of books you would like to view: "
+                        + "r =  read, cr = currently reading, tbr = to be read");
+                String status = input.next();
+                try {
+                    ArrayList<String> bks = bs.getBooksOfStatus(status);
+                    if (bks.isEmpty()) {
+                        System.out.println("There are no books of the given status on your bookshelf.");
+                    }
+                    for (String t : bks) {
+                        System.out.println(t);
+                    }
+                } catch (InvalidStatusException e) {
+                    System.out.println(e.getMessage());
                 }
-                for (String t : bks) {
-                    System.out.println(t);
-                }
-            } catch (InvalidStatusException e) {
-                System.out.println(e.getMessage());
-            }
 
-        } else if (command.equals("rating")) {
-            System.out.println("Enter rating of books you would like to view; between 0 and 5:");
-            int rating = input.nextInt();
-            try {
-                ArrayList<String> bks = bs.getBooksOfRating(rating); // will throw invalid rating exception
-                if (bks.isEmpty()) {
-                    System.out.println("There are no books of the given rating on your bookshelf.");
+                break;
+            case "rating":
+                System.out.println("Enter rating of books you would like to view; between 0 and 5:");
+                int rating = input.nextInt();
+                try {
+                    ArrayList<String> bks = bs.getBooksOfRating(rating); // will throw invalid rating exception
+                    if (bks.isEmpty()) {
+                        System.out.println("There are no books of the given rating on your bookshelf.");
+                    }
+                    for (String i : bks) {
+                        System.out.println(i);
+                    }
+                } catch (InvalidRatingException e) {
+                    System.out.println(e.getMessage());
                 }
-                for (String i : bks) {
-                    System.out.println(i);
-                }
-            } catch (InvalidRatingException e) {
-                System.out.println(e.getMessage());
-            }
 
-        } else if (command.equals("all")) {
-            if (bs.getBooks().isEmpty()) {
-                System.out.println("Your bookshelf is empty.");
-            }
-            for (String l : bs.getAllBooks()) {
-                System.out.println(l);
-            }
-        } else {
-            System.out.println("Not a valid input.");
+                break;
+            case "all":
+                if (bs.getBooks().isEmpty()) {
+                    System.out.println("Your bookshelf is empty.");
+                }
+                for (String l : bs.getAllBooks()) {
+                    System.out.println(l);
+                }
+                break;
+            default:
+                System.out.println("Not a valid input.");
+                break;
         }
     }
 
     private String statusToNiceString(BookStatus status) {
-        String ret = null;
         if (status == BookStatus.READ) {
-            ret = "read";
+            return "read";
         } else if (status == BookStatus.TOBEREAD) {
-            ret = "to be read";
+            return "to be read";
         } else {
-            ret = "read";
+            return "read";
         }
-        return ret;
     }
 
     // MODIFIES: this
     // EFFECTS: changes the rating or status of a single book
     // source: TellerApp
     private void changeABook() {
-        String command = null;
         displayMenuChange();
-        command = input.next();
+        String command = input.next();
         processCommandChange(command);
     }
 
