@@ -15,14 +15,12 @@ public class BookshelfApp {
     private static final String JSON_STORE = "./data/bookshelf.json";
     private Bookshelf bs;
     private Scanner input;
-    private final JsonWriter jsonWriter;
-    private final JsonReader jsonReader;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECTS: runs the Bookshelf Application
     // source: TellerApp
     public BookshelfApp() {
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
         runBookshelfApp();
     }
 
@@ -146,6 +144,7 @@ public class BookshelfApp {
     // EFFECTS: adds a book to the bookshelf
     private void addBook() {
         System.out.println("Enter title of book:");
+        input.nextLine();
         String title = input.nextLine();
 
         System.out.println("Enter the name of the author:");
@@ -308,6 +307,7 @@ public class BookshelfApp {
 
             if (command.equals("status")) {
                 System.out.println("Enter new status: r =  read, cr = currently reading, tbr = to be read:");
+                input.nextLine();
                 String status = input.next();
                 try {
                     b.changeStatus(status);
@@ -381,6 +381,7 @@ public class BookshelfApp {
     // EFFECTS: saves the bookshelf to file
     // source:JsonSerializationDemo
     private void saveBookshelf() {
+        jsonWriter = new JsonWriter(JSON_STORE);
         try {
             jsonWriter.open();
             jsonWriter.write(bs);
@@ -394,6 +395,7 @@ public class BookshelfApp {
     // MODIFIES: this
     // EFFECTS: loads bookshelf from file
     private void loadBookshelf() {
+        jsonReader = new JsonReader(JSON_STORE);
         try {
             bs = jsonReader.read();
             System.out.println("Loaded " + bs.getName() + " from " + JSON_STORE);

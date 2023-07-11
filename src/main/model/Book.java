@@ -35,21 +35,17 @@ public class Book implements Writable {
 
     // EFFECTS: converts string to BookStatus
     private BookStatus convertStatus(String input) throws InvalidStatusException {
-        BookStatus status = BookStatus.TOBEREAD;
         switch (input) {
             case "r":
-                status = BookStatus.READ;
-                break;
+                return BookStatus.READ;
             case "cr":
-                status = BookStatus.CURRENTLYREADING;
-                break;
+                return BookStatus.CURRENTLYREADING;
             case "tbr":
                 //status = BookStatus.TOBEREAD; //redundant since default to TBR
-                break;
+                return BookStatus.TOBEREAD;
             default:
                 throw new InvalidStatusException();
         }
-        return status;
     }
 
     // setters
