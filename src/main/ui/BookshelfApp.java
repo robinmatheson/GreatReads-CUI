@@ -207,14 +207,7 @@ public class BookshelfApp {
                 System.out.println("Enter title of book:");
                 String title = input.next();
                 if (bs.inBookshelf(title)) {
-                    Book book = bs.getBook(title);
-                    if (book.getRating() == 1) {
-                        System.out.println(book.getTitle() + " by " + book.getAuthor()
-                                + ", " + statusToNiceString(book.getStatus()) + ", 1 star");
-                    } else {
-                        System.out.println(book.getTitle() + " by " + book.getAuthor()
-                                + ", " + statusToNiceString(book.getStatus()) + ", " + book.getRating() + " stars");
-                    }
+                    printAllBookData(bs.getBook(title));
                 } else {
                     System.out.println("No book matching that title is in the bookshelf.");
                 }
@@ -225,12 +218,12 @@ public class BookshelfApp {
                         + "r =  read, cr = currently reading, tbr = to be read");
                 String status = input.next();
                 try {
-                    ArrayList<String> bks = bs.getBooksOfStatus(status);
+                    ArrayList<Book> bks = bs.getBooksOfStatus(status); // can throw invalid status exception
                     if (bks.isEmpty()) {
                         System.out.println("There are no books of the given status on your bookshelf.");
                     }
-                    for (String t : bks) {
-                        System.out.println(t);
+                    for (Book b : bks) {
+                        printAllBookData(b);
                     }
                 } catch (InvalidStatusException e) {
                     System.out.println(e.getMessage());
@@ -241,12 +234,12 @@ public class BookshelfApp {
                 System.out.println("Enter rating of books you would like to view; between 0 and 5:");
                 int rating = input.nextInt();
                 try {
-                    ArrayList<String> bks = bs.getBooksOfRating(rating); // will throw invalid rating exception
+                    ArrayList<Book> bks = bs.getBooksOfRating(rating); // can throw invalid rating exception
                     if (bks.isEmpty()) {
                         System.out.println("There are no books of the given rating on your bookshelf.");
                     }
-                    for (String i : bks) {
-                        System.out.println(i);
+                    for (Book b : bks) {
+                        printAllBookData(b);
                     }
                 } catch (InvalidRatingException e) {
                     System.out.println(e.getMessage());
@@ -257,13 +250,23 @@ public class BookshelfApp {
                 if (bs.getBooks().isEmpty()) {
                     System.out.println("Your bookshelf is empty.");
                 }
-                for (String l : bs.getAllBooks()) {
-                    System.out.println(l);
+                for (Book b : bs.getAllBooks()) {
+                    printAllBookData(b);
                 }
                 break;
             default:
                 System.out.println("Not a valid input.");
                 break;
+        }
+    }
+
+    private void printAllBookData(Book b) {
+        if (b.getRating() == 1) {
+            System.out.println(b.getTitle() + " by " + b.getAuthor()
+                    + ", " + statusToNiceString(b.getStatus()) + ", 1 star");
+        } else {
+            System.out.println(b.getTitle() + " by " + b.getAuthor()
+                    + ", " + statusToNiceString(b.getStatus()) + ", " + b.getRating() + " stars");
         }
     }
 

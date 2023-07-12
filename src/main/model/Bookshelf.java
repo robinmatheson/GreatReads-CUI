@@ -84,8 +84,8 @@ public class Bookshelf implements Writable {
     }
 
     // EFFECTS: returns set of titles of all the books in the bookshelf
-    public Set<String> getAllBooks() {
-        return books.keySet();
+    public Collection<Book> getAllBooks() {
+        return books.values();
     }
 
     // EFFECTS: returns iterator for the HashMap of books in this bookshelf
@@ -94,14 +94,14 @@ public class Bookshelf implements Writable {
     }
 
     // EFFECTS: returns list titles of all the books in the bookshelf of given status
-    public ArrayList<String> getBooksOfStatus(String status) throws InvalidStatusException {
-        ArrayList<String> allBooksOfStatus = new ArrayList<>();
+    public ArrayList<Book> getBooksOfStatus(String status) throws InvalidStatusException {
+        ArrayList<Book> allBooksOfStatus = new ArrayList<>();
         BookStatus stat = convertStatus(status);
         Iterator<Book> booksIterator = getBooksIterator();
         while (booksIterator.hasNext()) {
             Book next = booksIterator.next();
             if (next.getStatus() == stat) {
-                allBooksOfStatus.add(next.getTitle());
+                allBooksOfStatus.add(next);
             }
         }
         return allBooksOfStatus;
@@ -128,8 +128,8 @@ public class Bookshelf implements Writable {
 
     // REQUIRES: rating must be an integer between 0 and 5, inclusive
     // EFFECTS: returns titles of all books with given rating
-    public ArrayList<String> getBooksOfRating(int rating) throws InvalidRatingException {
-        ArrayList<String> allBooksOfRating = new ArrayList<>();
+    public ArrayList<Book> getBooksOfRating(int rating) throws InvalidRatingException {
+        ArrayList<Book> allBooksOfRating = new ArrayList<>();
         if (rating < 0 || rating > 5) {
             throw new InvalidRatingException();
         } else {
@@ -137,7 +137,7 @@ public class Bookshelf implements Writable {
             while (booksIterator.hasNext()) {
                 Book next = booksIterator.next();
                 if (next.getRating() == rating) {
-                    allBooksOfRating.add(next.getTitle());
+                    allBooksOfRating.add(next);
                 }
             }
         }

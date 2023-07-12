@@ -83,7 +83,7 @@ public class BookTest {
     }
 
     @Test
-    public void testInvalidRating() {
+    public void testChangeToInvalidRating() {
         try {
             book2.changeRating(6);
             fail();
@@ -93,12 +93,24 @@ public class BookTest {
     }
 
     @Test
-    public void testInvalidStatus() {
+    public void testChangeToInvalidStatus() {
         try {
             book3.changeStatus("dnf");
             fail();
         } catch (InvalidStatusException e) {
             //expected
+        }
+    }
+
+    @Test
+    public void testNewBookInvalidRating() {
+        try {
+            new Book("Fourth Wing", "Rebecca Yarros", "cr", 9);
+            fail();
+        } catch (InvalidRatingException e) {
+            // expected
+        } catch (InvalidEntryException e) {
+            fail();
         }
     }
 
