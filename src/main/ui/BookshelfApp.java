@@ -153,14 +153,13 @@ public class BookshelfApp {
         try {
             System.out.println("Enter the status of the book: r = read, cr = currently reading, tbr = to be read:");
             String status = input.next();
-            checkValidStatus(status); // want exception caught here if invalid status
+            checkValidStatus(status); // want exception thrown here if invalid status
 
             System.out.println("Enter the star rating of the book out of 5; 0 if not yet read:");
             int rating = input.nextInt();
-            checkValidRating(rating);// want exception caught here if invalid rating
+            checkValidRating(rating); // want exception thrown here if invalid rating
 
-            Book b = new Book(title, author, status, rating);
-            bs.shelveBook(b);
+            bs.shelveBook(new Book(title, author, status, rating));
             System.out.println(title + " has been successfully added to your bookshelf.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -171,16 +170,14 @@ public class BookshelfApp {
     private void checkValidRating(int rat) throws InvalidRatingException {
         if (rat < 0 || rat > 5) {
             throw new InvalidRatingException();
-        }  // do nothing
-
+        }
     }
 
     // EFFECTS: throws exception if status is invalid
     private void checkValidStatus(String stat) throws InvalidStatusException {
         if (!stat.equals("r") && !stat.equals("cr") && !stat.equals("tbr")) {
             throw new InvalidStatusException();
-        }  // do nothing
-
+        }
     }
 
     // EFFECTS: prints new menu for user to view different sets of books
@@ -276,7 +273,7 @@ public class BookshelfApp {
         } else if (status == BookStatus.TOBEREAD) {
             return "to be read";
         } else {
-            return "read";
+            return "currently reading";
         }
     }
 
@@ -307,7 +304,6 @@ public class BookshelfApp {
 
             if (command.equals("status")) {
                 System.out.println("Enter new status: r =  read, cr = currently reading, tbr = to be read:");
-                input.nextLine();
                 String status = input.next();
                 try {
                     b.changeStatus(status);

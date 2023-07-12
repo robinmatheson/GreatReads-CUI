@@ -41,7 +41,6 @@ public class Book implements Writable {
             case "cr":
                 return BookStatus.CURRENTLYREADING;
             case "tbr":
-                //status = BookStatus.TOBEREAD; //redundant since default to TBR
                 return BookStatus.TOBEREAD;
             default:
                 throw new InvalidStatusException();
@@ -53,7 +52,6 @@ public class Book implements Writable {
     // MODIFIES: this
     // EFFECTS: sets status as given status
     public void changeStatus(String status) throws InvalidStatusException {
-        // BookStatus stat = convertStatus(status);
         this.status = convertStatus(status);
         EventLog.getInstance().logEvent(new Event("Changed status of " + title));
     }
