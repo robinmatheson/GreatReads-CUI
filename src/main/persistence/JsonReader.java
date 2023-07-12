@@ -73,6 +73,7 @@ public class JsonReader {
         bs.shelveBook(book);
     }
 
+    // EFFECTS: converts a BookStatus to a string
     private String statusToString(BookStatus status) {
         String ret = null;
         if (status == BookStatus.READ) {
