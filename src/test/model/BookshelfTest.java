@@ -48,7 +48,7 @@ public class BookshelfTest {
         myBookshelf.shelveBook(book1);
         assertEquals(100, myBookshelf.getGoal());
         assertEquals("Robin's Bookshelf", myBookshelf.getName());
-        assertEquals(1, myBookshelf.getBooks().size());
+        assertEquals(1, myBookshelf.getCardinality());
         assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
     }
 
@@ -67,7 +67,7 @@ public class BookshelfTest {
     @Test
     public void testShelveOneBook() throws DuplicateBookException {
         myBookshelf.shelveBook(book1);
-        assertEquals(1, myBookshelf.getBooks().size());
+        assertEquals(1, myBookshelf.getCardinality());
         assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
     }
 
@@ -77,7 +77,7 @@ public class BookshelfTest {
         myBookshelf.shelveBook(book2);
         assertEquals(book1, myBookshelf.getBooks().get("Throne of Glass"));
         assertEquals(book2, myBookshelf.getBooks().get("Love On the Brain"));
-        assertEquals(2, myBookshelf.getBooks().size());
+        assertEquals(2, myBookshelf.getCardinality());
     }
 
     @Test

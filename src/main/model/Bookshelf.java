@@ -28,7 +28,6 @@ public class Bookshelf implements Writable {
         EventLog.getInstance().logEvent(new Event("Made bookshelf called " + getName()));
     }
 
-    // REQUIRES: goal >= 0
     // MODIFIES: this
     // EFFECTS: sets goal to int given
     public void setGoal(int goal) throws InvalidGoalException {
@@ -177,7 +176,6 @@ public class Bookshelf implements Writable {
     public int getGoal() {
         return this.goal;
     }
-
 
     // EFFECTS: returns a string stating the name of the bookshelf
     public String getName() {
