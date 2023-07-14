@@ -270,6 +270,7 @@ public class BookshelfApp {
         }
     }
 
+    // EFFECTS: converts BookStatus to string to display
     private String statusToNiceString(BookStatus status) {
         if (status == BookStatus.READ) {
             return "read";
