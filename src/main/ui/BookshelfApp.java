@@ -263,10 +263,10 @@ public class BookshelfApp {
     private void printAllBookData(Book b) {
         if (b.getRating() == 1) {
             System.out.println(b.getTitle() + " by " + b.getAuthor()
-                    + ", " + statusToNiceString(b.getStatus()) + ", 1 star");
+                    + ", " + statusToNiceString(b.getStatus()) + ", " + convertRatingToEmojis(1));
         } else {
             System.out.println(b.getTitle() + " by " + b.getAuthor()
-                    + ", " + statusToNiceString(b.getStatus()) + ", " + b.getRating() + " stars");
+                    + ", " + statusToNiceString(b.getStatus()) + ", " + convertRatingToEmojis(b.getRating()));
         }
     }
 
@@ -279,6 +279,16 @@ public class BookshelfApp {
         } else {
             return "currently reading";
         }
+    }
+
+    // EFFECTS: converts rating to a string of star characters
+    private String convertRatingToEmojis(int rating) {
+        String ret = "";
+        String star = "\u2B50";
+        for (int i = 1; i <= rating; i++) {
+            ret += star;
+        }
+        return ret;
     }
 
     // MODIFIES: this
