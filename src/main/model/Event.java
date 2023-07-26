@@ -3,39 +3,28 @@ package model;
 import java.util.Calendar;
 import java.util.Date;
 
-// source: Event class from Alarm project
+// source: Event class from Alarm project, CPSC 210
 
-/**
- * Represents a bookshelf event.
- */
+// Represents a bookshelf event.
 public class Event {
+
     private static final int HASH_CONSTANT = 13;
     private final Date dateLogged;
     private final String description;
 
-    /**
-     * Creates an event with the given description
-     * and the current date/time stamp.
-     * @param description  a description of the event
-     */
+    // EFFECTS: Creates an event with the given description and the current date/time stamp
     public Event(String description) {
         dateLogged = Calendar.getInstance().getTime();
         this.description = description;
     }
 
     // not used in project
-    /**
-     * Gets the date of this event (includes time).
-     * @return  the date of the event
-     */
+    // EFFECTS: returns date of event
     public Date getDate() {
         return dateLogged;
     }
 
-    /**
-     * Gets the description of this event.
-     * @return  the description of the event
-     */
+    // EFFECTS: returns the description of this event
     public String getDescription() {
         return description;
     }
@@ -59,6 +48,7 @@ public class Event {
         return (HASH_CONSTANT * dateLogged.hashCode() + description.hashCode());
     }
 
+    // EFFECTS: returns a readable string of this Event
     @Override
     public String toString() {
         return dateLogged.toString() + ": " + description;
