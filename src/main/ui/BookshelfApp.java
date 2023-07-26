@@ -10,13 +10,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// Bookshelf application
+// Bookshelf application with a console UI using a Scanner
+
+// Note: I have included "MODIFIES: Scanner" in every method that has 'input.next()' and 'input.nextLine()' since those
+//       methods alter the Scanner class fields
 public class BookshelfApp {
+
     private static final String JSON_STORE = "./data/bookshelf.json";
     private Bookshelf bs;
     private Scanner input;
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
 
     // EFFECTS: runs the Bookshelf Application
     // source: TellerApp
@@ -24,23 +26,21 @@ public class BookshelfApp {
         runBookshelfApp();
     }
 
-    // MODIFIES: this
-    // EFFECTS: processes user input
+    // MODIFIES: this, Scanner
+    // EFFECTS: checks and maintains app running/quitting when necessary
     // source: TellerApp
     private void runBookshelfApp() {
         boolean keepGoing = true;
-        String command;
 
         init();
 
         while (keepGoing) {
             displayMenuRoot();
-            command = input.next();
+            String command = input.next();
 
             if (command.equals("q")) {
                 displayPromptSave();
-                command = input.next();
-                processPromptSave(command);
+                processPromptSave(input.next());
                 printLog();
                 keepGoing = false;
             } else {
@@ -50,15 +50,14 @@ public class BookshelfApp {
         System.out.println("Happy Reading!");
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, Scanner
     // EFFECTS: initializes bookshelf
     // source: TellerApp
     private void init() {
         input = new Scanner(System.in);
         input.useDelimiter("\n");
         displayPromptLoad();
-        String command = input.nextLine();
-        processPromptLoad(command);
+        processPromptLoad(input.nextLine());
     }
 
     // EFFECTS: displays option to load bookshelf from file
@@ -68,8 +67,9 @@ public class BookshelfApp {
         System.out.println("n -> no, I want to create a new one");
     }
 
+    // processes user command of opening prompt
     // MODIFIES: this
-    // EFFECTS: processes user command
+    // EFFECTS: loads previous or creates new bookshelf; defaults to new bookshelf with invalid input
     private void processPromptLoad(String command) {
         if (command.equals("y")) {
             loadBookshelf();
@@ -81,30 +81,30 @@ public class BookshelfApp {
         }
     }
 
+    // creates new bookshelf
+    // MODIFIES: this
+    // EFFECTS: instantiates new bookshelf with inputted name
     private void createBookshelf() {
         System.out.println("Name your bookshelf:");
-        String name = input.nextLine();
-        bs = new Bookshelf(name);
+        bs = new Bookshelf(input.nextLine());
     }
 
+    // main menu
     // EFFECTS: displays first menu of options (root) to user
-    // source: TellerApp
     private void displayMenuRoot() {
-        System.out.println("a -> add book"); // gui
-        System.out.println("b -> view books"); // gui
+        System.out.println("a -> add book");
+        System.out.println("b -> view books");
         System.out.println("c -> change rating or status of a book");
         System.out.println("g -> set reading goal");
         System.out.println("p -> view reading goal progress");
         System.out.println("r -> remove book");
         System.out.println("v -> view bookshelf characteristics");
-        System.out.println("s -> save bookshelf to file"); // gui
-        System.out.println("l -> load bookshelf from file"); // gui
+        System.out.println("s -> save bookshelf to file");
+        System.out.println("l -> load bookshelf from file");
         System.out.println("q -> quit");
     }
 
-    // MODIFIES: this
     // EFFECTS: processes user command from main menu
-    // source: TellerApp
     private void processCommandRoot(String command) {
         switch (command) {
             case "a":
@@ -140,25 +140,31 @@ public class BookshelfApp {
         }
     }
 
-    // MODIFIES: this
-    // EFFECTS: adds a book to the bookshelf
+    // MODIFIES: Scanner, Bookshelf
+    // EFFECTS: adds a book to the bookshelf with inputted specifications, or throws exception due to invalid input,
+    //          duplicate book title
     private void addBook() {
+        // title
         System.out.println("Enter title of book:");
         input.nextLine();
         String title = input.nextLine();
 
+        // author
         System.out.println("Enter the name of the author:");
         String author = input.nextLine();
 
         try {
+            // status
             System.out.println("Enter the status of the book: r = read, cr = currently reading, tbr = to be read:");
             String status = input.next();
             checkValidStatus(status); // want exception thrown here if invalid status
 
+            // rating
             System.out.println("Enter the star rating of the book out of 5; 0 if not yet read:");
             int rating = input.nextInt();
             checkValidRating(rating); // want exception thrown here if invalid rating
 
+            // shelving
             bs.shelveBook(new Book(title, author, status, rating));
             System.out.println(title + " has been successfully added to your bookshelf.");
         } catch (Exception e) {
@@ -180,17 +186,14 @@ public class BookshelfApp {
         }
     }
 
-    // EFFECTS: prints new menu for user to view different sets of books
-
-    // source: TellerApp
+    // MODIFIES: Scanner
+    // EFFECTS: calls methods for menu and processing input for viewing books
     private void viewBooks() {
         displayMenuView();
-        String command = input.next();
-        processCommandView(command);
+        processCommandView(input.next());
     }
 
     // EFFECTS: displays menu of options for viewing books
-    // source: TellerApp
     private void displayMenuView() {
         System.out.println("book -> view a specific book");
         System.out.println("status -> view books of a certain status");
@@ -198,11 +201,13 @@ public class BookshelfApp {
         System.out.println("all -> view all books on your bookshelf");
     }
 
-    // MODIFIES: this
-    // EFFECTS: processes user command
-    // source: TellerApp
+    // MODIFIES: Scanner
+    // EFFECTS: processes user command from the menu for viewing books, or throws exception due to invalid status or
+    //          rating
     private void processCommandView(String command) {
         switch (command) {
+
+            // viewing a single book
             case "book":
                 System.out.println("Enter title of book:");
                 String title = input.next();
@@ -211,8 +216,9 @@ public class BookshelfApp {
                 } else {
                     System.out.println("No book matching that title is in the bookshelf.");
                 }
-
                 break;
+
+            // viewing all books of a certain status
             case "status":
                 System.out.println("Enter status of books you would like to view: "
                         + "r =  read, cr = currently reading, tbr = to be read");
@@ -228,8 +234,9 @@ public class BookshelfApp {
                 } catch (InvalidStatusException e) {
                     System.out.println(e.getMessage());
                 }
-
                 break;
+
+            // viewing all books of a certain rating
             case "rating":
                 System.out.println("Enter rating of books you would like to view; between 0 and 5:");
                 int rating = input.nextInt();
@@ -244,8 +251,9 @@ public class BookshelfApp {
                 } catch (InvalidRatingException e) {
                     System.out.println(e.getMessage());
                 }
-
                 break;
+
+            // viewing all books currently on the bookshelf
             case "all":
                 if (bs.getBooks().isEmpty()) {
                     System.out.println("Your bookshelf is empty.");
@@ -254,20 +262,17 @@ public class BookshelfApp {
                     printAllBookData(b);
                 }
                 break;
+            // invalid menu choice inputted
             default:
                 System.out.println("Not a valid input.");
                 break;
         }
     }
 
+    // EFFECTS: prints to console all the data of the given book
     private void printAllBookData(Book b) {
-        if (b.getRating() == 1) {
-            System.out.println(b.getTitle() + " by " + b.getAuthor()
-                    + ", " + statusToNiceString(b.getStatus()) + ", " + convertRatingToEmojis(1));
-        } else {
-            System.out.println(b.getTitle() + " by " + b.getAuthor()
-                    + ", " + statusToNiceString(b.getStatus()) + ", " + convertRatingToEmojis(b.getRating()));
-        }
+        System.out.println(b.getTitle() + " by " + b.getAuthor()
+                + ", " + statusToNiceString(b.getStatus()) + ", " + convertRatingToEmojis(b.getRating()));
     }
 
     // EFFECTS: converts BookStatus to string to display
@@ -281,7 +286,7 @@ public class BookshelfApp {
         }
     }
 
-    // EFFECTS: converts rating to a string of star characters
+    // EFFECTS: converts rating to a string of star emojis; empty string if rating is 0
     private String convertRatingToEmojis(int rating) {
         String ret = "";
         String star = "\u2B50";
@@ -291,62 +296,61 @@ public class BookshelfApp {
         return ret;
     }
 
-    // MODIFIES: this
-    // EFFECTS: changes the rating or status of a single book
-    // source: TellerApp
+    // MODIFIES: Scanner
+    // EFFECTS: calls methods for menu and processing input for changing a book
     private void changeABook() {
         displayMenuChange();
-        String command = input.next();
-        processCommandChange(command);
+        processCommandChange(input.next());
     }
 
     // EFFECTS: displays menu of options for changing a book
-    // source: TellerApp
     private void displayMenuChange() {
         System.out.println("status -> change status");
         System.out.println("rating -> change rating");
     }
 
-    // MODIFIES: this
-    // EFFECTS: processes user command
-    // source: TellerApp
+    // MODIFIES: Scanner, Book
+    // EFFECTS: processes user command for changing a book
     private void processCommandChange(String command) {
         System.out.println("Enter the title of the book you would like to alter:");
         String title = input.next();
+        // checking if book is in bookshelf
         if (bs.inBookshelf(title)) {
+            // if so, retrieve it
             Book b = bs.getBook(title);
 
+            // changing status
             if (command.equals("status")) {
                 System.out.println("Enter new status: r =  read, cr = currently reading, tbr = to be read:");
-                String status = input.next();
                 try {
-                    b.changeStatus(status);
+                    b.changeStatus(input.next());
                     System.out.println("Status changed successfully.");
                 } catch (InvalidStatusException e) {
                     System.out.println(e.getMessage());
                 }
 
+            // changing rating
             } else if (command.equals("rating")) {
                 System.out.println("Enter new rating between 1 and 5; 0 if not yet read:");
-                int rating = input.nextInt();
                 try {
-                    b.changeRating(rating);
+                    b.changeRating(input.nextInt());
                     System.out.println("Rating changed successfully.");
                 } catch (InvalidRatingException e) {
                     System.out.println(e.getMessage());
                 }
             }
-
-            } else {
-                System.out.println("Book with given title is not in bookshelf.");
-            }
+        // book with given title is not in bookshelf
+        } else {
+            System.out.println("Book with given title is not in bookshelf.");
         }
+    }
 
-    // MODIFIES: this
+    // MODIFIES: Bookshelf, Scanner
     // EFFECTS: sets a goal for the bookshelf
     private void doSetGoal() {
         System.out.println("Enter the number of books you would like to read:");
         int num = input.nextInt();
+
         try {
             bs.setGoal(num);
             if (num == 1) {
@@ -364,11 +368,12 @@ public class BookshelfApp {
         System.out.println(bs.getGoalProgress());
     }
 
-    // MODIFIES: this
+    // MODIFIES: Bookshelf, Scanner
     // EFFECTS: removes a book to the bookshelf
     private void removeBook() {
         System.out.println("Enter title of book you would like to remove:");
         String title = input.next();
+
         if (bs.inBookshelf(title)) {
             bs.burnBook(title);
             System.out.println(title + " successfully removed from your bookshelf.");
@@ -381,6 +386,7 @@ public class BookshelfApp {
     private void viewBookshelfChar() {
         String name = bs.getName();
         int num = bs.getCardinality();
+
         if (num == 1) {
             System.out.println("Your bookshelf is called " + name + " and has 1 book on it!");
         } else {
@@ -389,9 +395,10 @@ public class BookshelfApp {
     }
 
     // EFFECTS: saves the bookshelf to file
-    // source:JsonSerializationDemo
+    // source: JsonSerializationDemo
     private void saveBookshelf() {
-        jsonWriter = new JsonWriter(JSON_STORE);
+        JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
+
         try {
             jsonWriter.open();
             jsonWriter.write(bs);
@@ -402,24 +409,17 @@ public class BookshelfApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, Bookshelf
     // EFFECTS: loads bookshelf from file
     private void loadBookshelf() {
-        jsonReader = new JsonReader(JSON_STORE);
+        JsonReader jsonReader = new JsonReader(JSON_STORE);
         try {
             bs = jsonReader.read();
             System.out.println("Loaded " + bs.getName() + " from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
-        } catch (Exception e) { // should never occur since loading valid bookshelf from scratch
+        } catch (Exception e) { // should never occur since loading valid bookshelf
             System.out.println(e.getMessage());
-        }
-    }
-
-    // EFFECTS: prints a log of every action taken in the session with time stamps
-    private void printLog() {
-        for (Event event : EventLog.getInstance()) {
-            System.out.println(event.toString());
         }
     }
 
@@ -437,6 +437,13 @@ public class BookshelfApp {
             saveBookshelf();
         } else if (!command.equals("n")) {
             System.out.println("Invalid selection. Bookshelf not saved to file.");
+        }
+    }
+
+    // EFFECTS: prints a log of every action taken in the session with time stamps
+    private void printLog() {
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString());
         }
     }
 
