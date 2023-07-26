@@ -1,5 +1,24 @@
 {
-    "books": [],
-    "goal": 0,
-    "name": "Mine"
+    "books": [
+        {
+            "author": "f",
+            "rating": 0,
+            "title": "a",
+            "status": "READ"
+        },
+        {
+            "author": "adf",
+            "rating": 4,
+            "title": "asdf",
+            "status": "TOBEREAD"
+        },
+        {
+            "author": "n",
+            "rating": 2,
+            "title": "i",
+            "status": "CURRENTLYREADING"
+        }
+    ],
+    "goal": 34,
+    "name": "hiiiiii"
 }

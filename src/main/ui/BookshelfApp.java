@@ -271,8 +271,13 @@ public class BookshelfApp {
 
     // EFFECTS: prints to console all the data of the given book
     private void printAllBookData(Book b) {
-        System.out.println(b.getTitle() + " by " + b.getAuthor()
-                + ", " + statusToNiceString(b.getStatus()) + ", " + convertRatingToEmojis(b.getRating()));
+        if (b.getRating() == 0) {
+            System.out.println(b.getTitle() + " by " + b.getAuthor()
+                    + ", " + statusToNiceString(b.getStatus()) + ", no rating");
+        } else {
+            System.out.println(b.getTitle() + " by " + b.getAuthor()
+                    + ", " + statusToNiceString(b.getStatus()) + ", " + convertRatingToEmojis(b.getRating()));
+        }
     }
 
     // EFFECTS: converts BookStatus to string to display
