@@ -52,7 +52,7 @@ public class JsonReader {
         return bs;
     }
 
-    // MODIFIES: bs
+    // MODIFIES: Bookshelf
     // EFFECTS: parses books from JSON object and adds them to bookshelf
     private void addBooks(Bookshelf bs, JSONObject jsonObject) throws InvalidEntryException, DuplicateBookException {
         JSONArray jsonArray = jsonObject.getJSONArray("books");
@@ -62,7 +62,7 @@ public class JsonReader {
         }
     }
 
-    // MODIFIES: bs
+    // MODIFIES: Bookshelf
     // EFFECTS: parses book from JSON object and adds it to the workroom
     private void addBook(Bookshelf bs, JSONObject jsonObject) throws InvalidEntryException, DuplicateBookException {
         String title = jsonObject.getString("title");
@@ -75,14 +75,13 @@ public class JsonReader {
 
     // EFFECTS: converts a BookStatus to a string
     private String statusToString(BookStatus status) {
-        String ret = null;
         if (status == BookStatus.READ) {
-            ret = "r";
+            return "r";
         } else if (status == BookStatus.TOBEREAD) {
-            ret = "tbr";
+            return "tbr";
         } else if (status == BookStatus.CURRENTLYREADING) {
-            ret = "cr";
+            return "cr";
         }
-        return ret;
+        return "";
     }
 }
