@@ -1,4 +1,4 @@
-# GreatReads
+# GreatReads (Console UI)
 
 *GreatReads* is an application where users can keep track of the books in their library. Users are able to add a book 
 with a title, reading status, and star rating to their bookshelf, where they can keep track of their books, their 
@@ -21,10 +21,6 @@ using
 - object-oriented programming, data abstraction, encapsulation, single responsibility principle, decreasing class 
 - coupling, increasing class cohesion, etc.
 
-In the future, I plan on adding a prompt when first running the application to ask if the user would like to load a 
-bookshelf from file, and another prompt when quitting to ask if the user would like to save the current bookshelf to 
-file.
-
 ### Features
 First, you can create a bookshelf with a custom name.
 ##### Then, you can:
@@ -40,3 +36,15 @@ First, you can create a bookshelf with a custom name.
 - view its characteristics (name and number of books shelved)
 - save my bookshelf to file
 - open a saved bookshelf from file
+- upon quitting a log of your events is printed to the console
+
+### Future plans
+- refactor implementation of the HashMap and hashcode generation to allow two books with the same title to be on the bookshelf
+
+### How to use
+1. Clone this repo
+2. Open the project in your favourite code editor with a Java compiler
+3. Run 'Main' in the ui package
+4. The console should open up with a prompt to choose between loading a bookshelf from file or creating a new one
+5. Following every prompt, input your answer followed by the 'Enter' key
+6. Have fun tracking all the books on your bookshelf (or library if you've reached 1000 books!)
