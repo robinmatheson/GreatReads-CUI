@@ -108,31 +108,28 @@ public class Bookshelf implements Writable {
 
     // EFFECTS: converts string to BookStatus
     private BookStatus convertStatus(String input) throws InvalidStatusException {
-        BookStatus status = BookStatus.TOBEREAD;
         switch (input) {
             case "r":
-                status = BookStatus.READ;
-                break;
+                return BookStatus.READ;
             case "cr":
-                status = BookStatus.CURRENTLYREADING;
-                break;
+                return BookStatus.CURRENTLYREADING;
             case "tbr":
-                //status = BookStatus.TOBEREAD; //redundant since default to TBR
-                break;
+                return BookStatus.TOBEREAD;
             default:
                 throw new InvalidStatusException();
         }
-        return status;
     }
 
-    // REQUIRES: rating must be an integer between 0 and 5, inclusive
-    // EFFECTS: returns titles of all books with given rating
+    // EFFECTS: returns titles of all books with given rating; throws exception if invalid rating passed
     public ArrayList<Book> getBooksOfRating(int rating) throws InvalidRatingException {
         ArrayList<Book> allBooksOfRating = new ArrayList<>();
+        // check for valid rating
         if (rating < 0 || rating > 5) {
             throw new InvalidRatingException();
+
         } else {
             Iterator<Book> booksIterator = getBooksIterator();
+
             while (booksIterator.hasNext()) {
                 Book next = booksIterator.next();
                 if (next.getRating() == rating) {
@@ -147,6 +144,7 @@ public class Bookshelf implements Writable {
     public String getGoalProgress() {
         int read = getNumberRead();
         int goal = getGoal();
+
         if (read == 1) {
             return "You have read 1 book out of your goal of " + goal + "!";
         } else {
@@ -163,6 +161,7 @@ public class Bookshelf implements Writable {
     public int getNumberRead() {
         int count = 0;
         Iterator<Book> booksIterator = getBooksIterator();
+
         while (booksIterator.hasNext()) {
             if (booksIterator.next().getStatus() == BookStatus.READ) {
                 count++;
@@ -197,7 +196,7 @@ public class Bookshelf implements Writable {
         return json;
     }
     
-    // EFFECTS: return books in this workroom as a JSON array
+    // EFFECTS: return books in this bookshelf as a JSON array
     private JSONArray booksToJson() {
         JSONArray jsonArray = new JSONArray();
 
