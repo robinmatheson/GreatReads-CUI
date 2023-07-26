@@ -41,7 +41,6 @@ public class JsonReader {
         return contentBuilder.toString();
     }
 
-    // MODIFIES: Bookshelf
     // EFFECTS: parses bookshelf from JSON object and returns it
     private Bookshelf parseBookshelf(JSONObject jsonObject) throws InvalidEntryException, DuplicateBookException {
         String name = jsonObject.getString("name");
@@ -53,6 +52,7 @@ public class JsonReader {
         return bs;
     }
 
+    // MODIFIES: Bookshelf
     // EFFECTS: parses books from JSON object and adds them to bookshelf
     private void addBooks(Bookshelf bs, JSONObject jsonObject) throws InvalidEntryException, DuplicateBookException {
         JSONArray jsonArray = jsonObject.getJSONArray("books");
