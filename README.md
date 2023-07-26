@@ -40,6 +40,7 @@ First, you can create a bookshelf with a custom name.
 
 ### Future plans
 - refactor implementation of the HashMap and hashcode generation to allow two books with the same title to be on the bookshelf
+- throw an exception when the inputted rating of a book is not an int
 
 ### How to use
 1. Clone this repo
