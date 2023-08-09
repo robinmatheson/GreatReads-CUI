@@ -45,7 +45,15 @@ First, you can create a bookshelf with a custom name.
 ### How to use
 1. Clone this repo
 2. Open the project in your favourite code editor with a Java compiler
-3. Run 'Main' in the ui package
+3. Run the executable file 'Main' in the ui package (src/main/ui/Main.java)
+
+   <img width="225" alt="Screenshot 2023-08-09 at 1 40 51 PM" src="https://github.com/robinmatheson/GreatReads-Console-UI/assets/125790030/aa10eed2-da23-499d-9ddf-ffcb4140f148">
 4. The console should open up with a prompt to choose between loading a bookshelf from file or creating a new one
+   <img width="1410" alt="Screenshot 2023-08-09 at 1 42 21 PM" src="https://github.com/robinmatheson/GreatReads-Console-UI/assets/125790030/6e41742f-9d26-412a-b08b-57fd7b96a9e3">
 5. Following every prompt, input your answer followed by the 'Enter' key
 6. Have fun tracking all the books on your bookshelf (or library if you've reached 1000 books!)
+
+   *Here is a use example:*
+   https://github.com/robinmatheson/GreatReads-Console-UI/assets/125790030/2b14730f-633a-4d36-87be-f9e1d1ce7a2f
+
+
