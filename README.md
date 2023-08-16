@@ -54,6 +54,7 @@ First, you can create a bookshelf with a custom name.
 6. Have fun tracking all the books on your bookshelf (or library if you've reached 1000 books!)
 
    *Here is a use example:*
-   https://github.com/robinmatheson/GreatReads-Console-UI/assets/125790030/2b14730f-633a-4d36-87be-f9e1d1ce7a2f
+   
+   <video width="200" src="https://github.com/robinmatheson/GreatReads-Console-UI/assets/125790030/2b14730f-633a-4d36-87be-f9e1d1ce7a2f"/>
 
 
